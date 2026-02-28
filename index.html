@@ -2,54 +2,228 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Stavební deník – Přihlášení</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --blue:    #1e40af;
-      --blue-d:  #1e3a8a;
-      --blue-l:  #dbeafe;
-      --orange:  #ea580c;
-      --gray-50: #f8fafc;
-      --gray-100:#f1f5f9;
-      --gray-200:#e2e8f0;
-      --gray-400:#94a3b8;
-      --gray-600:#475569;
-      --gray-800:#1e293b;
+    body {
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    body { font-family: system-ui, sans-serif; background: var(--gray-100); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-    .login-wrap { width: 100%; max-width: 420px; padding: 24px; }
-    .logo-bar { text-align: center; margin-bottom: 32px; }
-    .logo-bar .icon { font-size: 2.8rem; display: block; margin-bottom: 8px; }
-    .logo-bar h1 { font-size: 1.6rem; font-weight: 800; color: var(--gray-800); }
-    .logo-bar p { color: var(--gray-600); font-size: 0.9rem; margin-top: 4px; }
-    .card { background: #fff; border-radius: 16px; padding: 36px 32px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
-    .field { margin-bottom: 18px; }
-    .field label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 6px; }
-    .field input { width: 100%; border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 11px 14px; font-size: 0.95rem; font-family: inherit; outline: none; transition: border-color 0.15s; }
-    .field input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(30,64,175,0.1); }
-    .btn { width: 100%; background: var(--blue); color: #fff; font-weight: 700; font-size: 1rem; padding: 13px; border: none; border-radius: 8px; cursor: pointer; font-family: inherit; transition: background 0.15s; }
-    .btn:hover { background: var(--blue-d); }
-    .forgot { text-align: center; margin-top: 16px; font-size: 0.85rem; color: var(--gray-600); }
-    .forgot a { color: var(--blue); text-decoration: none; font-weight: 600; }
-    .divider { text-align: center; color: var(--gray-400); font-size: 0.8rem; margin: 20px 0; }
-    .demo-btn { width: 100%; background: var(--gray-100); color: var(--gray-800); font-weight: 600; font-size: 0.9rem; padding: 11px; border: 1.5px solid var(--gray-200); border-radius: 8px; cursor: pointer; font-family: inherit; transition: background 0.15s; margin-bottom: 8px; }
-    .demo-btn:last-of-type { margin-bottom: 0; }
-    .demo-btn:hover { background: var(--gray-200); }
-    .demo-btn.mgr { background: #eff6ff; border-color: #bfdbfe; color: var(--blue); }
-    .demo-btn.mgr:hover { background: #dbeafe; }
-    .demo-label { font-size: 0.72rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; margin-top: 2px; }
+
+    .login-wrap {
+      width: 100%;
+      max-width: 380px;
+      padding: 20px;
+    }
+
+    .logo-bar {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .login-logo {
+      height: 90px;
+      display: block;
+      margin: 0 auto 14px;
+    }
+
+    .logo-bar h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .logo-bar p {
+      color: var(--subtle);
+      font-size: 0.78rem;
+      margin-top: 4px;
+    }
+
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 28px 24px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 5px;
+    }
+
+    .field input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 9px 12px;
+      font-size: 0.875rem;
+      font-family: inherit;
+      outline: none;
+      color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .field input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(46,139,46,0.14);
+    }
+
+    .btn-login {
+      width: 100%;
+      background: var(--slate);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.15s;
+      margin-top: 4px;
+    }
+
+    .btn-login:hover { opacity: 0.88; }
+
+    .forgot {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 0.78rem;
+      color: var(--subtle);
+    }
+
+    .forgot a {
+      color: var(--green);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .divider {
+      text-align: center;
+      color: var(--subtle);
+      font-size: 0.72rem;
+      margin: 18px 0;
+      position: relative;
+    }
+
+    .divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .divider span {
+      position: relative;
+      background: var(--surface);
+      padding: 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .demo-section-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .demo-btn {
+      width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 500;
+      font-size: 0.84rem;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 6px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .demo-btn:hover {
+      background: var(--surface);
+      border-color: var(--border-2);
+    }
+
+    .demo-btn.mgr {
+      background: var(--green-bg);
+      border-color: var(--green-b);
+      color: var(--green-d);
+    }
+
+    .demo-btn.mgr:hover {
+      background: #dcfce7;
+    }
+
+    .demo-role-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .demo-btn.mgr .demo-role-icon {
+      background: var(--green-b);
+      color: var(--green-d);
+    }
+
+    .demo-btn-text { flex: 1; }
+    .demo-btn-name { font-weight: 600; font-size: 0.84rem; }
+    .demo-btn-role { font-size: 0.72rem; color: var(--subtle); margin-top: 1px; }
+    .demo-btn.mgr .demo-btn-role { color: var(--green); }
+
+    .version {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.7rem;
+      color: var(--subtle);
+    }
   </style>
 </head>
 <body>
+
 <div class="login-wrap">
   <div class="logo-bar">
-    <span class="icon">🏗️</span>
+    <img src="logo.jpg" class="login-logo" alt="I. Kamenická stavební a obchodní firma s.r.o." />
     <h1>Stavební deník</h1>
-    <p>Digitální deník pro stavební firmy</p>
+    <p>Digitální deník pro stavební firmy · vyhl. č. 499/2006 Sb.</p>
   </div>
-  <div class="card">
+
+  <div class="login-card">
     <div class="field">
       <label>E-mail</label>
       <input type="email" placeholder="jnovak@firma.cz" />
@@ -58,14 +232,33 @@
       <label>Heslo</label>
       <input type="password" placeholder="••••••••" />
     </div>
-    <button class="btn" onclick="login()">Přihlásit se</button>
-    <div class="divider">nebo vyzkoušejte demo</div>
-    <div class="demo-label">Přihlásit jako:</div>
-    <button class="demo-btn" onclick="window.location='dashboard.html'">👷 Stavbyvedoucí — Jan Novák</button>
-    <button class="demo-btn mgr" onclick="window.location='dashboard-nadrizeny.html'">👔 Nadřízený / Ředitel — Petr Mrázek</button>
+    <button class="btn-login" onclick="login()">Přihlásit se</button>
     <div class="forgot"><a href="#">Zapomenuté heslo?</a></div>
+
+    <div class="divider"><span>nebo demo přístup</span></div>
+
+    <div class="demo-section-label">Vyberte roli</div>
+
+    <button class="demo-btn" onclick="window.location='dashboard.html'">
+      <div class="demo-role-icon">JN</div>
+      <div class="demo-btn-text">
+        <div class="demo-btn-name">Jan Novák</div>
+        <div class="demo-btn-role">Stavbyvedoucí</div>
+      </div>
+    </button>
+
+    <button class="demo-btn mgr" onclick="window.location='dashboard-nadrizeny.html'">
+      <div class="demo-role-icon">PM</div>
+      <div class="demo-btn-text">
+        <div class="demo-btn-name">Petr Mrázek</div>
+        <div class="demo-btn-role">Nadřízený / Ředitel</div>
+      </div>
+    </button>
   </div>
+
+  <div class="version">Stavební deník v3.0 · Demo</div>
 </div>
+
 <script>
   function login() {
     const email = document.querySelector('input[type=email]').value.toLowerCase();

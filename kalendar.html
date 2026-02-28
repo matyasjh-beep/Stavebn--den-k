@@ -2,163 +2,108 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Stavební deník – Kalendář</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --blue:    #1e40af;
-      --blue-d:  #1e3a8a;
-      --blue-l:  #dbeafe;
-      --blue-50: #eff6ff;
-      --orange:  #ea580c;
-      --green:   #15803d;
-      --green-l: #dcfce7;
-      --gray-50: #f8fafc;
-      --gray-100:#f1f5f9;
-      --gray-200:#e2e8f0;
-      --gray-300:#cbd5e1;
-      --gray-400:#94a3b8;
-      --gray-600:#475569;
-      --gray-700:#334155;
-      --gray-800:#1e293b;
-    }
-    body { font-family: system-ui, sans-serif; background: var(--gray-100); color: var(--gray-800); }
+    .main { padding: 24px 28px; overflow-y: auto; }
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
 
-    /* Topbar */
-    .topbar { background: var(--blue-d); color: #fff; padding: 0 24px; height: 58px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-    .topbar-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.05rem; }
-    .topbar-logo span { font-size: 1.4rem; }
-    .topbar-right { display: flex; align-items: center; gap: 16px; }
-    .topbar-user { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; }
-    .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; }
-    .topbar-btn { background: rgba(255,255,255,0.15); border: none; color: #fff; padding: 6px 14px; border-radius: 6px; font-size: 0.82rem; cursor: pointer; font-family: inherit; font-weight: 600; }
-    .topbar-btn:hover { background: rgba(255,255,255,0.25); }
-
-    /* Layout */
-    .layout { display: flex; min-height: calc(100vh - 58px); }
-    .sidebar { width: 220px; background: #fff; border-right: 1px solid var(--gray-200); padding: 20px 0; flex-shrink: 0; }
-    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 0.875rem; font-weight: 500; color: var(--gray-600); cursor: pointer; transition: background 0.1s; text-decoration: none; }
-    .nav-item:hover { background: var(--gray-100); color: var(--gray-800); }
-    .nav-item.active { background: var(--blue-50); color: var(--blue); font-weight: 700; border-right: 3px solid var(--blue); }
-    .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
-    .nav-section { font-size: 0.7rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.08em; padding: 16px 20px 6px; }
-
-    .main { flex: 1; padding: 28px; overflow-y: auto; }
-
-    /* Page header */
-    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-    .page-title { font-size: 1.4rem; font-weight: 800; color: var(--gray-800); }
-
-    /* Main layout: calendar + panel */
-    .cal-wrap { display: flex; gap: 20px; align-items: flex-start; }
+    .cal-wrap { display: flex; gap: 16px; align-items: flex-start; }
     .cal-col { flex: 1; min-width: 0; }
-    .note-col { width: 300px; flex-shrink: 0; position: sticky; top: 28px; }
+    .note-col { width: 280px; flex-shrink: 0; position: sticky; top: 24px; }
 
-    /* Calendar card */
-    .cal-card { background: #fff; border-radius: 14px; box-shadow: 0 1px 6px rgba(0,0,0,0.07); overflow: hidden; }
-    .cal-header { padding: 16px 20px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; }
-    .cal-month-label { font-size: 1.15rem; font-weight: 800; color: var(--gray-800); }
-    .cal-nav { display: flex; gap: 8px; align-items: center; }
-    .cal-nav-btn { background: var(--gray-100); border: 1.5px solid var(--gray-200); width: 32px; height: 32px; border-radius: 7px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; }
-    .cal-nav-btn:hover { background: var(--blue-50); border-color: var(--blue); color: var(--blue); }
-    .cal-today-btn { font-size: 0.78rem; font-weight: 700; color: var(--blue); background: var(--blue-50); border: none; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-family: inherit; }
-    .cal-today-btn:hover { background: var(--blue-l); }
+    .cal-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .cal-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .cal-month-label { font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+    .cal-nav { display: flex; gap: 6px; align-items: center; }
+    .cal-nav-btn { background: var(--surface); border: 1px solid var(--border); width: 28px; height: 28px; border-radius: 5px; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+    .cal-nav-btn:hover { background: var(--bg); border-color: var(--border-2); color: var(--text); }
+    .cal-today-btn { font-size: 0.74rem; font-weight: 600; color: var(--green-d); background: var(--green-bg); border: 1px solid var(--green-b); padding: 4px 10px; border-radius: 5px; cursor: pointer; font-family: inherit; }
+    .cal-today-btn:hover { background: #dcfce7; }
 
     .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
-    .cal-weekday { padding: 10px 8px; text-align: center; font-size: 0.7rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--gray-100); }
+    .cal-weekday { padding: 8px; text-align: center; font-size: 0.63rem; font-weight: 600; color: var(--subtle); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); }
     .cal-weekday.weekend { color: var(--orange); }
-
-    .cal-day { min-height: 76px; padding: 7px; border-right: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); cursor: pointer; transition: background 0.1s; }
-    .cal-day:hover { background: var(--blue-50); }
-    .cal-day.other-month { background: var(--gray-50); }
-    .cal-day.other-month .day-num { color: var(--gray-300); }
-    .cal-day.today .day-num { background: var(--blue); color: #fff; border-radius: 50%; }
+    .cal-day { min-height: 68px; padding: 6px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.1s; }
+    .cal-day:hover { background: var(--bg); }
+    .cal-day.other-month { background: var(--bg); }
+    .cal-day.other-month .day-num { color: var(--border-2); }
+    .cal-day.today .day-num { background: var(--slate); color: #fff; border-radius: 50%; }
     .cal-day.weekend:not(.other-month) .day-num { color: var(--orange); }
-    .cal-day.selected { background: var(--blue-50); outline: 2px solid var(--blue); outline-offset: -2px; }
+    .cal-day.selected { background: var(--green-bg); outline: 2px solid var(--green); outline-offset: -2px; }
+    .day-num { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 600; color: var(--text); border-radius: 50%; margin-bottom: 3px; }
+    .day-note-chip { font-size: 0.62rem; background: var(--green); color: #fff; border-radius: 3px; padding: 2px 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-top: 2px; font-weight: 500; }
+    .day-note-dot { width: 5px; height: 5px; background: var(--green); border-radius: 50%; margin-top: 3px; }
 
-    .day-num { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 0.82rem; font-weight: 700; color: var(--gray-700); border-radius: 50%; margin-bottom: 4px; }
-    .day-note-chip { font-size: 0.68rem; background: var(--blue); color: #fff; border-radius: 3px; padding: 2px 5px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-top: 2px; }
-    .day-note-dot { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; margin-top: 4px; }
+    .note-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+    .note-empty { text-align: center; padding: 24px 12px; color: var(--subtle); }
+    .note-empty-text { font-size: 0.82rem; line-height: 1.5; }
+    .note-panel-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .note-panel-date { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+    .note-panel-weekday { font-size: 0.74rem; color: var(--subtle); margin-top: 2px; }
+    .note-close { background: none; border: none; font-size: 1rem; cursor: pointer; color: var(--subtle); padding: 2px 5px; border-radius: 4px; }
+    .note-close:hover { background: var(--bg); color: var(--text); }
+    .note-field-label { font-size: 0.65rem; font-weight: 600; color: var(--subtle); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; margin-top: 10px; }
+    .note-field-label:first-child { margin-top: 0; }
+    .note-type-chips { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+    .note-type-chip { padding: 3px 9px; border-radius: 4px; border: 1px solid var(--border); font-size: 0.7rem; font-weight: 500; cursor: pointer; font-family: inherit; background: var(--surface); color: var(--muted); }
+    .note-type-chip:hover { border-color: var(--green); color: var(--green); }
+    .note-type-chip.sel { background: var(--green); color: #fff; border-color: var(--green); }
+    .note-title-input { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; font-size: 0.875rem; font-weight: 500; font-family: inherit; outline: none; margin-bottom: 10px; color: var(--text); }
+    .note-title-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(46,139,46,0.14); }
+    .note-textarea { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; font-size: 0.84rem; font-family: inherit; outline: none; resize: none; line-height: 1.6; color: var(--text); }
+    .note-textarea:focus { border-color: var(--green); }
+    .note-actions { display: flex; gap: 6px; margin-top: 10px; }
+    .btn-save-note { flex: 1; background: var(--green); color: #fff; border: none; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 0.82rem; cursor: pointer; font-family: inherit; }
+    .btn-save-note:hover { background: var(--green-d); }
+    .btn-delete-note { background: none; border: 1px solid var(--border); color: var(--muted); padding: 8px 10px; border-radius: 6px; font-size: 0.82rem; cursor: pointer; font-family: inherit; }
+    .btn-delete-note:hover { border-color: var(--red); color: var(--red); background: var(--red-bg); }
+    .note-hint { font-size: 0.66rem; color: var(--subtle); margin-top: 6px; text-align: center; }
 
-    /* Note panel */
-    .note-panel { background: #fff; border-radius: 14px; box-shadow: 0 1px 6px rgba(0,0,0,0.07); padding: 20px; }
-    .note-empty { text-align: center; padding: 32px 16px; color: var(--gray-400); }
-    .note-empty-icon { font-size: 2.4rem; display: block; margin-bottom: 10px; }
-    .note-empty-text { font-size: 0.875rem; line-height: 1.5; }
-
-    .note-panel-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-200); }
-    .note-panel-date { font-size: 1.05rem; font-weight: 800; color: var(--gray-800); }
-    .note-panel-weekday { font-size: 0.8rem; color: var(--gray-400); margin-top: 2px; }
-    .note-close { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--gray-400); padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
-    .note-close:hover { background: var(--gray-100); }
-
-    .note-field-label { font-size: 0.72rem; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 5px; }
-    .note-title-input { width: 100%; border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 9px 12px; font-size: 0.9rem; font-weight: 600; font-family: inherit; outline: none; margin-bottom: 12px; }
-    .note-title-input:focus { border-color: var(--blue); }
-    .note-textarea { width: 100%; border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 9px 12px; font-size: 0.875rem; font-family: inherit; outline: none; resize: none; line-height: 1.65; }
-    .note-textarea:focus { border-color: var(--blue); }
-
-    .note-actions { display: flex; gap: 8px; margin-top: 10px; }
-    .btn-save-note { flex: 1; background: var(--blue); color: #fff; border: none; padding: 9px; border-radius: 8px; font-weight: 700; font-size: 0.875rem; cursor: pointer; font-family: inherit; }
-    .btn-save-note:hover { background: var(--blue-d); }
-    .btn-delete-note { background: none; border: 1.5px solid var(--gray-200); color: var(--gray-600); padding: 9px 12px; border-radius: 8px; font-size: 0.875rem; cursor: pointer; font-family: inherit; }
-    .btn-delete-note:hover { border-color: #ef4444; color: #ef4444; background: #fef2f2; }
-    .note-hint { font-size: 0.72rem; color: var(--gray-400); margin-top: 6px; text-align: center; }
-
-    /* Upcoming */
-    .upcoming-card { background: #fff; border-radius: 14px; box-shadow: 0 1px 6px rgba(0,0,0,0.07); padding: 18px; margin-top: 14px; }
-    .upcoming-title-row { font-size: 0.72rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
-    .upcoming-item { padding: 9px 11px; border-radius: 8px; background: var(--gray-50); margin-bottom: 6px; cursor: pointer; border: 1.5px solid transparent; }
+    .upcoming-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-top: 12px; }
+    .upcoming-title-row { font-size: 0.65rem; font-weight: 600; color: var(--subtle); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .upcoming-item { padding: 8px 10px; border-radius: 6px; background: var(--bg); margin-bottom: 5px; cursor: pointer; border: 1px solid transparent; }
     .upcoming-item:last-child { margin-bottom: 0; }
-    .upcoming-item:hover { background: var(--blue-50); border-color: var(--blue-l); }
-    .upcoming-date { font-size: 0.72rem; font-weight: 700; color: var(--blue); }
-    .upcoming-item-title { font-size: 0.82rem; font-weight: 600; color: var(--gray-800); margin-top: 2px; }
-    .upcoming-item-text { font-size: 0.75rem; color: var(--gray-500); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-    .upcoming-empty { font-size: 0.82rem; color: var(--gray-400); text-align: center; padding: 10px 0; }
-
-    /* Toast */
-    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #fff; padding: 11px 20px; border-radius: 9px; font-weight: 700; font-size: 0.875rem; box-shadow: 0 4px 16px rgba(0,0,0,0.15); transform: translateY(80px); transition: transform 0.3s; z-index: 999; }
-    .toast.show { transform: translateY(0); }
+    .upcoming-item:hover { background: var(--green-bg); border-color: var(--green-b); }
+    .upcoming-date { font-size: 0.68rem; font-weight: 600; color: var(--green-d); }
+    .upcoming-item-title { font-size: 0.78rem; font-weight: 600; color: var(--text); margin-top: 1px; }
+    .upcoming-item-text { font-size: 0.7rem; color: var(--subtle); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .upcoming-empty { font-size: 0.78rem; color: var(--subtle); text-align: center; padding: 8px 0; }
   </style>
 </head>
 <body>
-
 <div class="topbar">
-  <div class="topbar-logo"><span>🏗️</span> Stavební deník</div>
+  <a href="dashboard.html" class="topbar-logo">
+    <img src="logo.jpg" class="topbar-logo-img" alt="I. Kamenická stavební" />
+    Stavební deník
+  </a>
   <div class="topbar-right">
-    <div class="topbar-user">
-      <div class="avatar">JN</div>
-      <span>Jan Novák</span>
-    </div>
+    <div class="topbar-user"><div class="avatar-top">JN</div><span>Jan Novák</span></div>
     <button class="topbar-btn" onclick="window.location='index.html'">Odhlásit</button>
   </div>
 </div>
-
 <div class="layout">
   <aside class="sidebar">
     <div class="nav-section">Hlavní menu</div>
-    <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span> Moje stavby</a>
-    <a class="nav-item" href="denik.html"><span class="nav-icon">📖</span> Deník</a>
-    <a class="nav-item active" href="kalendar.html"><span class="nav-icon">📅</span> Kalendář</a>
-    <a class="nav-item" href="#"><span class="nav-icon">👷</span> Pracovníci</a>
+    <a class="nav-item" href="dashboard.html"><span class="nav-dot"></span> Moje stavby</a>
+    <a class="nav-item" href="denik.html"><span class="nav-dot"></span> Deník</a>
+    <a class="nav-item active" href="kalendar.html"><span class="nav-dot"></span> Kalendář</a>
+    <a class="nav-item" href="pracovnici.html"><span class="nav-dot"></span> Pracovníci</a>
     <div class="nav-section">Firma</div>
-    <a class="nav-item" href="#"><span class="nav-icon">🏢</span> Všechny stavby</a>
-    <a class="nav-item" href="#"><span class="nav-icon">👥</span> Tým</a>
-    <a class="nav-item" href="#"><span class="nav-icon">📊</span> Přehledy</a>
+    <a class="nav-item" href="dashboard-nadrizeny.html"><span class="nav-dot"></span> Všechny stavby</a>
+    <a class="nav-item" href="pracovnici.html"><span class="nav-dot"></span> Tým</a>
+    <a class="nav-item" href="prehled.html"><span class="nav-dot"></span> Přehledy</a>
     <div class="nav-section">Nastavení</div>
-    <a class="nav-item" href="#"><span class="nav-icon">⚙️</span> Nastavení</a>
-    <a class="nav-item" href="#"><span class="nav-icon">👤</span> Profil</a>
+    <a class="nav-item" href="nastaveni.html"><span class="nav-dot"></span> Nastavení</a>
+    <a class="nav-item" href="profil.html"><span class="nav-dot"></span> Profil</a>
   </aside>
-
   <main class="main">
     <div class="page-header">
-      <div class="page-title">📅 Kalendář poznámek</div>
+      <div class="page-title">Kalendář událostí</div>
     </div>
-
     <div class="cal-wrap">
-
-      <!-- Kalendář -->
       <div class="cal-col">
         <div class="cal-card">
           <div class="cal-header">
@@ -172,283 +117,184 @@
           <div class="cal-grid" id="cal-grid"></div>
         </div>
       </div>
-
-      <!-- Panel poznámky -->
       <div class="note-col">
         <div class="note-panel" id="note-panel">
-
-          <!-- Prázdný stav -->
           <div class="note-empty" id="note-empty">
-            <span class="note-empty-icon">📋</span>
-            <div class="note-empty-text">Klikněte na libovolný den pro přidání poznámky.</div>
+            <div class="note-empty-text">Klikněte na libovolný den pro přidání poznámky nebo události.</div>
           </div>
-
-          <!-- Editor -->
           <div id="note-editor" style="display:none;">
             <div class="note-panel-header">
               <div>
                 <div class="note-panel-date" id="note-date-label"></div>
                 <div class="note-panel-weekday" id="note-weekday-label"></div>
               </div>
-              <button class="note-close" onclick="closeNote()" title="Zavřít panel">✕</button>
+              <button class="note-close" onclick="closeNote()">✕</button>
             </div>
-
+            <div class="note-field-label">Typ události</div>
+            <div class="note-type-chips">
+              <button class="note-type-chip sel" onclick="toggleNoteType(this)">Poznámka</button>
+              <button class="note-type-chip" onclick="toggleNoteType(this)">Porada</button>
+              <button class="note-type-chip" onclick="toggleNoteType(this)">Kontrolní prohlídka</button>
+              <button class="note-type-chip" onclick="toggleNoteType(this)">Dodávka</button>
+              <button class="note-type-chip" onclick="toggleNoteType(this)">Zkouška / test</button>
+              <button class="note-type-chip" onclick="toggleNoteType(this)">Milník</button>
+            </div>
             <div class="note-field-label">Název / téma</div>
-            <input class="note-title-input" id="note-title" type="text" placeholder="Název poznámky…" />
-
-            <div class="note-field-label">Poznámka</div>
-            <textarea class="note-textarea" id="note-text" rows="9"
-              placeholder="Napište poznámku…&#10;&#10;Např.:&#10;• Porada s investorem&#10;• Kontrolní den&#10;• Dodávka materiálu&#10;• Předání stavby"></textarea>
-
+            <input class="note-title-input" id="note-title" type="text" placeholder="Název události…" />
+            <div class="note-field-label">Poznámka / popis</div>
+            <textarea class="note-textarea" id="note-text" rows="7" placeholder="Napište poznámku…"></textarea>
             <div class="note-actions">
-              <button class="btn-save-note" onclick="saveNote()">💾 Uložit</button>
-              <button class="btn-delete-note" onclick="deleteNote()" title="Smazat poznámku">🗑</button>
+              <button class="btn-save-note" onclick="saveNote()">Uložit</button>
+              <button class="btn-delete-note" onclick="deleteNote()">Smazat</button>
             </div>
             <div class="note-hint">Ctrl + Enter – rychlé uložení</div>
           </div>
         </div>
-
-        <!-- Nadcházející poznámky -->
         <div class="upcoming-card">
-          <div class="upcoming-title-row">Nadcházející poznámky</div>
+          <div class="upcoming-title-row">Nadcházející události</div>
           <div id="upcoming-list"></div>
         </div>
       </div>
-
     </div>
   </main>
 </div>
-
 <div class="toast" id="toast"></div>
-
 <script>
-  // ── Konstanty ────────────────────────────────────────────
-  const STORAGE_KEY = 'sd_cal_notes';
+  const STORAGE_KEY = 'sd_cal_notes_v3';
   const CZ_MONTHS   = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
   const CZ_DAYS_L   = ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'];
   const CZ_DAYS_S   = ['Ne','Po','Út','St','Čt','Pá','So'];
 
-  // ── Stav ─────────────────────────────────────────────────
-  let notes       = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-  const today     = new Date();
-  let viewYear    = today.getFullYear();
-  let viewMonth   = today.getMonth();
-  let selectedKey = null;
+  let notes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  const today = new Date();
+  let viewYear = today.getFullYear(), viewMonth = today.getMonth(), selectedKey = null;
 
-  // ── Helpers ───────────────────────────────────────────────
-  function dateKey(y, m, d) {
-    return `${y}-${String(m + 1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-  }
-  function todayKey() {
-    return dateKey(today.getFullYear(), today.getMonth(), today.getDate());
-  }
-  function formatDate(key) {
-    const [y, m, d] = key.split('-').map(Number);
-    return `${d}. ${m}. ${y}`;
+  function dateKey(y, m, d) { return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+  function todayKey() { return dateKey(today.getFullYear(), today.getMonth(), today.getDate()); }
+  function formatDate(key) { const [y,m,d] = key.split('-').map(Number); return `${d}. ${m}. ${y}`; }
+
+  function toggleNoteType(btn) {
+    document.querySelectorAll('.note-type-chip').forEach(c => c.classList.remove('sel'));
+    btn.classList.add('sel');
   }
 
-  // ── Render kalendáře ──────────────────────────────────────
   function renderCalendar() {
-    document.getElementById('cal-month-label').textContent =
-      `${CZ_MONTHS[viewMonth]} ${viewYear}`;
-
+    document.getElementById('cal-month-label').textContent = `${CZ_MONTHS[viewMonth]} ${viewYear}`;
     const weekdays = ['Po','Út','St','Čt','Pá','So','Ne'];
-    let html = weekdays.map((d, i) =>
-      `<div class="cal-weekday${i >= 5 ? ' weekend' : ''}">${d}</div>`
-    ).join('');
-
-    // Offset: Monday = 0
-    const firstDOW   = new Date(viewYear, viewMonth, 1).getDay();
+    let html = weekdays.map((d,i) => `<div class="cal-weekday${i>=5?' weekend':''}">${d}</div>`).join('');
+    const firstDOW = new Date(viewYear, viewMonth, 1).getDay();
     const startOffset = (firstDOW + 6) % 7;
-    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-    const prevDays    = new Date(viewYear, viewMonth, 0).getDate();
-
+    const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+    const prevDays = new Date(viewYear, viewMonth, 0).getDate();
     const cells = [];
-
-    // Dny předchozího měsíce
-    for (let i = startOffset - 1; i >= 0; i--) {
-      const d = prevDays - i;
-      const m = viewMonth === 0 ? 11 : viewMonth - 1;
-      const y = viewMonth === 0 ? viewYear - 1 : viewYear;
-      cells.push({ day: d, key: dateKey(y, m, d), other: true });
+    for (let i = startOffset-1; i >= 0; i--) {
+      const d = prevDays-i, m = viewMonth===0?11:viewMonth-1, y = viewMonth===0?viewYear-1:viewYear;
+      cells.push({ day:d, key:dateKey(y,m,d), other:true });
     }
-
-    // Dny aktuálního měsíce
     for (let d = 1; d <= daysInMonth; d++) {
-      const key    = dateKey(viewYear, viewMonth, d);
-      const dow    = new Date(viewYear, viewMonth, d).getDay();
-      const isWknd = dow === 0 || dow === 6;
-      cells.push({ day: d, key, other: false, weekend: isWknd,
-                   isToday: key === todayKey() });
+      const key = dateKey(viewYear, viewMonth, d);
+      const dow = new Date(viewYear, viewMonth, d).getDay();
+      cells.push({ day:d, key, other:false, weekend:dow===0||dow===6, isToday:key===todayKey() });
     }
-
-    // Dny příštího měsíce (doplnění na 42 buněk)
     let extra = 1;
     while (cells.length < 42) {
-      const m = viewMonth === 11 ? 0 : viewMonth + 1;
-      const y = viewMonth === 11 ? viewYear + 1 : viewYear;
-      cells.push({ day: extra, key: dateKey(y, m, extra), other: true });
-      extra++;
+      const m = viewMonth===11?0:viewMonth+1, y = viewMonth===11?viewYear+1:viewYear;
+      cells.push({ day:extra, key:dateKey(y,m,extra), other:true }); extra++;
     }
-
     cells.forEach(c => {
       let cls = 'cal-day';
-      if (c.other)    cls += ' other-month';
-      if (c.isToday)  cls += ' today';
+      if (c.other) cls += ' other-month';
+      if (c.isToday) cls += ' today';
       if (c.weekend && !c.other) cls += ' weekend';
       if (c.key === selectedKey) cls += ' selected';
-
       const note = notes[c.key];
       let noteHtml = '';
       if (note && !c.other) {
-        if (note.title) {
-          noteHtml = `<div class="day-note-chip">${note.title}</div>`;
-        } else if (note.text) {
-          noteHtml = `<div class="day-note-dot"></div>`;
-        }
+        noteHtml = note.title ? `<div class="day-note-chip">${note.title}</div>` : `<div class="day-note-dot"></div>`;
       }
-
-      html += `<div class="${cls}" onclick="selectDay('${c.key}')">
-        <div class="day-num">${c.day}</div>
-        ${noteHtml}
-      </div>`;
+      html += `<div class="${cls}" onclick="selectDay('${c.key}')"><div class="day-num">${c.day}</div>${noteHtml}</div>`;
     });
-
     document.getElementById('cal-grid').innerHTML = html;
   }
 
-  // ── Výběr dne ─────────────────────────────────────────────
-  function selectDay(key) {
-    selectedKey = key;
-    renderCalendar();
-    openEditor(key);
-  }
+  function selectDay(key) { selectedKey = key; renderCalendar(); openEditor(key); }
 
   function openEditor(key) {
-    const [y, m, d] = key.split('-').map(Number);
-    const date = new Date(y, m - 1, d);
-
-    document.getElementById('note-date-label').textContent  = formatDate(key);
+    const [y,m,d] = key.split('-').map(Number);
+    const date = new Date(y, m-1, d);
+    document.getElementById('note-date-label').textContent = formatDate(key);
     document.getElementById('note-weekday-label').textContent = CZ_DAYS_L[date.getDay()];
-
     const note = notes[key] || {};
     document.getElementById('note-title').value = note.title || '';
-    document.getElementById('note-text').value  = note.text  || '';
-
-    document.getElementById('note-empty').style.display  = 'none';
+    document.getElementById('note-text').value = note.text || '';
+    document.getElementById('note-empty').style.display = 'none';
     document.getElementById('note-editor').style.display = 'block';
     document.getElementById('note-title').focus();
   }
 
   function closeNote() {
     selectedKey = null;
-    document.getElementById('note-empty').style.display  = 'block';
+    document.getElementById('note-empty').style.display = 'block';
     document.getElementById('note-editor').style.display = 'none';
     renderCalendar();
   }
 
-  // ── Uložení / smazání ─────────────────────────────────────
   function saveNote() {
     if (!selectedKey) return;
     const title = document.getElementById('note-title').value.trim();
-    const text  = document.getElementById('note-text').value.trim();
-
-    if (!title && !text) {
-      delete notes[selectedKey];
-    } else {
-      notes[selectedKey] = { title, text };
-    }
+    const text = document.getElementById('note-text').value.trim();
+    if (!title && !text) { delete notes[selectedKey]; } else { notes[selectedKey] = { title, text }; }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
-    renderCalendar();
-    renderUpcoming();
-    showToast('✅ Poznámka uložena');
+    renderCalendar(); renderUpcoming(); showToast('Poznámka uložena');
   }
 
   function deleteNote() {
-    if (!selectedKey) return;
-    if (!notes[selectedKey]) return;
+    if (!selectedKey || !notes[selectedKey]) return;
     delete notes[selectedKey];
     localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
     document.getElementById('note-title').value = '';
-    document.getElementById('note-text').value  = '';
-    renderCalendar();
-    renderUpcoming();
-    showToast('🗑 Poznámka smazána');
+    document.getElementById('note-text').value = '';
+    renderCalendar(); renderUpcoming(); showToast('Poznámka smazána');
   }
 
-  // ── Nadcházející poznámky ─────────────────────────────────
   function renderUpcoming() {
-    const tk   = todayKey();
-    const list = Object.entries(notes)
-      .filter(([k, v]) => k >= tk && (v.title || v.text))
-      .sort(([a], [b]) => a.localeCompare(b))
-      .slice(0, 6);
-
+    const tk = todayKey();
+    const list = Object.entries(notes).filter(([k,v]) => k >= tk && (v.title||v.text)).sort(([a],[b]) => a.localeCompare(b)).slice(0, 6);
     const el = document.getElementById('upcoming-list');
-    if (!list.length) {
-      el.innerHTML = '<div class="upcoming-empty">Žádné nadcházející poznámky</div>';
-      return;
-    }
+    if (!list.length) { el.innerHTML = '<div class="upcoming-empty">Žádné nadcházející události</div>'; return; }
     el.innerHTML = list.map(([key, note]) => {
-      const [y, m, d] = key.split('-').map(Number);
-      const dow  = new Date(y, m - 1, d).getDay();
-      const isT  = key === tk;
+      const [y,m,d] = key.split('-').map(Number);
+      const dow = new Date(y,m-1,d).getDay();
+      const isT = key === tk;
       const label = isT ? 'Dnes' : `${CZ_DAYS_S[dow]} ${d}. ${m}. ${y}`;
       return `<div class="upcoming-item" onclick="jumpTo('${key}')">
         <div class="upcoming-date">${label}</div>
         ${note.title ? `<div class="upcoming-item-title">${note.title}</div>` : ''}
-        ${note.text  ? `<div class="upcoming-item-text">${note.text}</div>`  : ''}
+        ${note.text  ? `<div class="upcoming-item-text">${note.text}</div>` : ''}
       </div>`;
     }).join('');
   }
 
   function jumpTo(key) {
-    const [y, m] = key.split('-').map(Number);
-    viewYear  = y;
-    viewMonth = m - 1;
-    selectedKey = key;
-    renderCalendar();
-    openEditor(key);
+    const [y,m] = key.split('-').map(Number);
+    viewYear = y; viewMonth = m-1; selectedKey = key;
+    renderCalendar(); openEditor(key);
   }
 
-  // ── Navigace měsíce ───────────────────────────────────────
-  function prevMonth() {
-    viewMonth--;
-    if (viewMonth < 0)  { viewMonth = 11; viewYear--; }
-    renderCalendar();
-  }
-  function nextMonth() {
-    viewMonth++;
-    if (viewMonth > 11) { viewMonth = 0;  viewYear++; }
-    renderCalendar();
-  }
-  function goToday() {
-    viewYear  = today.getFullYear();
-    viewMonth = today.getMonth();
-    renderCalendar();
-  }
+  function prevMonth() { viewMonth--; if (viewMonth<0) { viewMonth=11; viewYear--; } renderCalendar(); }
+  function nextMonth() { viewMonth++; if (viewMonth>11) { viewMonth=0; viewYear++; } renderCalendar(); }
+  function goToday() { viewYear = today.getFullYear(); viewMonth = today.getMonth(); renderCalendar(); }
 
-  // ── Toast ─────────────────────────────────────────────────
   function showToast(msg) {
     const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
+    t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2500);
   }
 
-  // ── Klávesová zkratka Ctrl+Enter ──────────────────────────
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && e.ctrlKey) saveNote();
-  });
+  document.addEventListener('keydown', e => { if (e.key==='Enter' && e.ctrlKey) saveNote(); });
 
-  // ── Init ──────────────────────────────────────────────────
-  renderCalendar();
-  renderUpcoming();
-
-  // Otevři dnešní den rovnou při načtení
-  selectedKey = todayKey();
-  renderCalendar();
-  openEditor(selectedKey);
+  renderCalendar(); renderUpcoming();
+  selectedKey = todayKey(); renderCalendar(); openEditor(selectedKey);
 </script>
 </body>
 </html>

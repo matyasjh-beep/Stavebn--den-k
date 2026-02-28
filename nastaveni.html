@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stavební deník – Nastavení</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .main { padding: 24px 28px; max-width: 860px; }
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <a href="dashboard.html" class="topbar-logo">
+    <img src="logo.jpg" class="topbar-logo-img" alt="I. Kamenická stavební" />
+    Stavební deník
+  </a>
+  <div class="topbar-right">
+    <div class="topbar-user"><div class="avatar-top">JN</div><span>Jan Novák</span></div>
+    <button class="topbar-btn" onclick="window.location='index.html'">Odhlásit</button>
+  </div>
+</div>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="nav-section">Hlavní menu</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-dot"></span> Moje stavby</a>
+    <a class="nav-item" href="denik.html"><span class="nav-dot"></span> Deník</a>
+    <a class="nav-item" href="kalendar.html"><span class="nav-dot"></span> Kalendář</a>
+    <a class="nav-item" href="pracovnici.html"><span class="nav-dot"></span> Pracovníci</a>
+    <div class="nav-section">Firma</div>
+    <a class="nav-item" href="dashboard-nadrizeny.html"><span class="nav-dot"></span> Všechny stavby</a>
+    <a class="nav-item" href="pracovnici.html"><span class="nav-dot"></span> Tým</a>
+    <a class="nav-item" href="prehled.html"><span class="nav-dot"></span> Přehledy</a>
+    <div class="nav-section">Nastavení</div>
+    <a class="nav-item active" href="nastaveni.html"><span class="nav-dot"></span> Nastavení</a>
+    <a class="nav-item" href="profil.html"><span class="nav-dot"></span> Profil</a>
+  </aside>
+  <main class="main">
+    <div class="page-title">Nastavení</div>
+
+    <div class="settings-section">
+      <div class="settings-title">Firemní údaje</div>
+      <div class="form-grid">
+        <div class="form-field"><label>Název firmy</label><input value="I. Kamenická stavební a obchodní firma s.r.o." /></div>
+        <div class="form-field"><label>IČO</label><input value="12345678" /></div>
+        <div class="form-field"><label>Sídlo firmy</label><input value="Stavební 12, Praha 9, 190 00" /></div>
+        <div class="form-field"><label>DIČ</label><input value="CZ12345678" /></div>
+        <div class="form-field"><label>Telefon</label><input value="+420 777 123 456" /></div>
+        <div class="form-field"><label>E-mail</label><input value="info@novak-stavebni.cz" /></div>
+        <div class="form-field"><label>Autorizační číslo ČKAIT</label><input value="1001234" /></div>
+        <div class="form-field"><label>Zodpovědná osoba</label><input value="Jan Novák" /></div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-title">Výchozí nastavení deníku</div>
+      <div class="form-grid">
+        <div class="form-field"><label>Výchozí TDI (Technický dozor investora)</label><input value="Ing. Jana Vlčková" /></div>
+        <div class="form-field"><label>Výchozí koordinátor BOZP</label><input value="Ing. Petr Číž" /></div>
+        <div class="form-field"><label>Výchozí projektant</label><input value="Ing. Pavel Horák" /></div>
+        <div class="form-field"><label>Logo pro PDF export</label><input type="file" accept="image/*" /></div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="toggle-row">
+          <div><div class="toggle-label">Povinné vyplnění BOZP sekce</div><div class="toggle-sub">Zobrazit varování, pokud není vyplněna sekce BOZP</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">Automatické upozornění na chybějící záznamy</div><div class="toggle-sub">E-mailem při 2+ dnech bez záznamu</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">Podpisové řádky v PDF exportu</div><div class="toggle-sub">Přidat řádky pro podpis stavbyvedoucího a TDI</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">Fotodokumentace v PDF exportu</div><div class="toggle-sub">Vložit nahrané fotky do PDF</div></div>
+          <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-title">Oznámení a upozornění</div>
+      <div class="toggle-row">
+        <div><div class="toggle-label">E-mailová oznámení</div><div class="toggle-sub">Zasílat souhrny deníku na e-mail</div></div>
+        <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div><div class="toggle-label">Upozornění na propadlé BOZP školení</div><div class="toggle-sub">30 dní před vypršením platnosti</div></div>
+        <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div><div class="toggle-label">Denní shrnutí deníku</div><div class="toggle-sub">Zaslat denní přehled na konci pracovní doby</div></div>
+        <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="save()">Uložit nastavení</button>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+  function save() {
+    const t = document.getElementById('toast');
+    t.textContent = 'Nastavení bylo uloženo';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>

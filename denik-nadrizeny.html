@@ -2,150 +2,136 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Stavební deník – Náhled (Bytový dům Prosecká)</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --blue:    #1e40af; --blue-d: #1e3a8a; --blue-l: #dbeafe; --blue-50: #eff6ff;
-      --teal:    #0f766e; --teal-l: #ccfbf1; --teal-50: #f0fdfa;
-      --orange:  #ea580c; --green: #15803d; --green-l: #dcfce7;
-      --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0;
-      --gray-300: #cbd5e1; --gray-400: #94a3b8; --gray-600: #475569;
-      --gray-700: #334155; --gray-800: #1e293b;
-    }
-    body { font-family: system-ui, sans-serif; background: var(--gray-100); color: var(--gray-800); }
-
-    /* Topbar */
-    .topbar { background: #134e4a; color: #fff; padding: 0 24px; height: 58px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-    .topbar-left { display: flex; align-items: center; gap: 14px; }
-    .topbar-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.05rem; text-decoration: none; color: #fff; }
-    .topbar-logo span { font-size: 1.4rem; }
-    .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; opacity: 0.8; }
+    .topbar-left { display: flex; align-items: center; gap: 8px; }
+    .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; opacity: 0.7; margin-left: 8px; }
     .breadcrumb a { color: #fff; text-decoration: none; }
-    .topbar-right { display: flex; align-items: center; gap: 10px; }
-    .role-badge { background: rgba(255,255,255,0.18); font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
-    .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--teal); border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; }
-    .btn-download { background: #fff; color: #134e4a; font-weight: 700; font-size: 0.875rem; padding: 8px 18px; border: none; border-radius: 8px; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 7px; transition: background .15s; }
-    .btn-download:hover { background: var(--teal-l); }
 
-    /* Layout */
-    .layout { display: flex; min-height: calc(100vh - 58px); }
-    .day-sidebar { width: 240px; background: #fff; border-right: 1px solid var(--gray-200); display: flex; flex-direction: column; flex-shrink: 0; }
-    .day-sidebar-header { padding: 16px; border-bottom: 1px solid var(--gray-200); }
-    .day-sidebar-header h3 { font-size: 0.875rem; font-weight: 700; color: var(--gray-800); margin-bottom: 10px; }
+    .layout { display: flex; min-height: calc(100vh - 68px); }
+
+    .day-sidebar { width: 230px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+    .day-sidebar-header { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+    .day-sidebar-title { font-size: 0.68rem; font-weight: 600; color: var(--subtle); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
     .month-nav { display: flex; align-items: center; justify-content: space-between; }
-    .month-nav button { background: none; border: none; cursor: pointer; color: var(--gray-600); font-size: 1rem; padding: 2px 6px; border-radius: 4px; }
-    .month-nav button:hover { background: var(--gray-100); }
-    .month-label { font-weight: 700; font-size: 0.875rem; }
+    .month-nav button { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 1rem; padding: 2px 6px; border-radius: 4px; }
+    .month-nav button:hover { background: var(--bg); }
+    .month-label { font-weight: 600; font-size: 0.84rem; color: var(--text); }
     .day-list { flex: 1; overflow-y: auto; }
-    .day-item { padding: 12px 16px; border-bottom: 1px solid var(--gray-100); cursor: pointer; transition: background .1s; }
-    .day-item:hover { background: var(--gray-50); }
-    .day-item.active { background: var(--teal-50); border-right: 3px solid var(--teal); }
-    .day-item-date { font-size: 0.875rem; font-weight: 700; color: var(--gray-800); display: flex; justify-content: space-between; }
-    .day-item-meta { font-size: 0.75rem; color: var(--gray-400); margin-top: 2px; }
+    .day-item { padding: 10px 16px; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .day-item:hover { background: var(--bg); }
+    .day-item.active { background: var(--green-bg); border-right: 2px solid var(--green); }
+    .day-item-date { font-size: 0.84rem; font-weight: 600; color: var(--text); display: flex; justify-content: space-between; }
+    .day-item-meta { font-size: 0.72rem; color: var(--subtle); margin-top: 2px; }
 
-    .main { flex: 1; overflow-y: auto; }
-    .readonly-bar { background: #fefce8; border-bottom: 1px solid #fef08a; padding: 8px 28px; display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: #854d0e; font-weight: 600; }
-    .readonly-badge { background: #fef08a; color: #713f12; font-size: 0.7rem; font-weight: 800; padding: 2px 9px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.05em; }
-    .stavba-info { background: #fff; border-bottom: 1px solid var(--gray-200); padding: 12px 28px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
-    .stavba-info-name { font-weight: 800; font-size: 1rem; }
-    .stavba-info-item { font-size: 0.8rem; color: var(--gray-500); }
-    .badge-sm { font-size: 0.7rem; font-weight: 700; padding: 2px 9px; border-radius: 100px; background: var(--green-l); color: var(--green); }
+    .main { flex: 1; overflow-y: auto; background: var(--bg); }
+    .readonly-bar { background: #fefce8; border-bottom: 1px solid #fef08a; padding: 7px 24px; display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: #854d0e; font-weight: 500; }
+    .readonly-badge { background: #fef08a; color: #713f12; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .stavba-info { background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .stavba-info-name { font-weight: 700; font-size: 0.95rem; color: var(--text); }
+    .stavba-info-item { font-size: 0.78rem; color: var(--muted); }
+    .badge-sm { font-size: 0.68rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: var(--green-bg); color: var(--green-d); border: 1px solid var(--green-b); }
 
-    .day-content { padding: 24px 28px; max-width: 900px; }
-    .day-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-    .day-date-big { font-size: 1.3rem; font-weight: 800; }
-    .day-date-big span { font-weight: 400; color: var(--gray-400); font-size: 1rem; margin-left: 8px; }
-    .title-actions { display: flex; gap: 8px; }
-    .btn-prev-next { background: var(--gray-100); border: 1.5px solid var(--gray-200); color: var(--gray-700); padding: 8px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: inherit; }
-    .btn-prev-next:hover { background: var(--gray-200); }
+    .day-content { padding: 20px 24px; max-width: 880px; }
+    .day-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+    .day-date-big { font-size: 1.2rem; font-weight: 700; color: var(--text); }
+    .day-date-big span { font-weight: 400; color: var(--subtle); font-size: 0.95rem; margin-left: 8px; }
+    .title-actions { display: flex; gap: 6px; }
+    .btn-prev-next { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 500; cursor: pointer; font-family: inherit; }
+    .btn-prev-next:hover { border-color: var(--border-2); color: var(--text); }
 
-    .section { background: #fff; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); padding: 20px 22px; margin-bottom: 16px; }
-    .section-title { font-size: 0.75rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; }
-    .ro-label { font-size: 0.72rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; margin-top: 10px; }
-    .ro-value { font-size: 0.9rem; color: var(--gray-800); line-height: 1.6; padding: 9px 12px; background: var(--gray-50); border-radius: 7px; border: 1px solid var(--gray-200); }
-    .weather-chips { display: flex; gap: 8px; flex-wrap: wrap; }
-    .weather-chip { padding: 7px 13px; border-radius: 100px; font-size: 0.85rem; border: 1.5px solid var(--gray-200); background: #fff; color: var(--gray-400); }
-    .weather-chip.active { border-color: var(--teal); background: var(--teal-50); font-weight: 700; color: var(--gray-800); }
-    .workers-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
-    .workers-table th { text-align: left; font-size: 0.72rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; padding: 6px 12px; background: var(--gray-50); border-bottom: 1px solid var(--gray-200); }
-    .workers-table td { padding: 10px 12px; border-bottom: 1px solid var(--gray-100); color: var(--gray-700); }
+    .section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; margin-bottom: 12px; }
+    .section-title { font-size: 0.68rem; font-weight: 600; color: var(--subtle); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 12px; }
+    .ro-label { font-size: 0.68rem; font-weight: 600; color: var(--subtle); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; margin-top: 10px; }
+    .ro-value { font-size: 0.88rem; color: var(--text); line-height: 1.6; padding: 8px 12px; background: var(--bg); border-radius: 6px; border: 1px solid var(--border); }
+    .weather-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .weather-chip { padding: 5px 11px; border-radius: 6px; font-size: 0.82rem; border: 1px solid var(--border); background: var(--surface); color: var(--subtle); }
+    .weather-chip.active { border-color: var(--green); background: var(--green-bg); font-weight: 600; color: var(--text); }
+
+    .workers-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .workers-table th { text-align: left; font-size: 0.65rem; font-weight: 600; color: var(--subtle); text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 12px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .workers-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--muted); }
     .workers-table tr:last-child td { border-bottom: none; }
-    .count-badge { display: inline-flex; align-items: center; justify-content: center; background: var(--teal); color: #fff; font-weight: 800; font-size: 0.82rem; width: 28px; height: 28px; border-radius: 50%; }
-    .workers-total-row { margin-top: 10px; padding: 8px 12px; background: var(--gray-50); border-radius: 7px; font-size: 0.82rem; color: var(--gray-600); font-weight: 600; }
-    .work-item { border: 1.5px solid var(--gray-200); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+    .count-badge { display: inline-flex; align-items: center; justify-content: center; background: var(--slate); color: #fff; font-weight: 700; font-size: 0.78rem; width: 26px; height: 26px; border-radius: 50%; }
+    .workers-total-row { margin-top: 10px; padding: 7px 12px; background: var(--bg); border-radius: 6px; border: 1px solid var(--border); font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+
+    .work-item { border: 1px solid var(--border); border-radius: 7px; padding: 12px 14px; margin-bottom: 10px; }
     .work-item:last-child { margin-bottom: 0; }
-    .work-num { font-size: 0.72rem; font-weight: 700; color: var(--gray-400); margin-bottom: 8px; }
-    .kat-chip { display: inline-block; padding: 4px 10px; border-radius: 100px; font-size: 0.75rem; font-weight: 600; background: var(--teal); color: #fff; margin-right: 4px; }
+    .work-num { font-size: 0.68rem; font-weight: 600; color: var(--subtle); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .kat-chip { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 600; background: var(--green); color: #fff; margin-right: 4px; }
     .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
-    .mech-card { display: inline-flex; align-items: center; gap: 10px; background: var(--blue-50); border: 1.5px solid var(--blue-l); border-radius: 9px; padding: 8px 14px; margin: 4px 4px 4px 0; }
-    .mech-spz { font-size: 0.72rem; font-weight: 700; font-family: monospace; background: var(--gray-800); color: #fff; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.08em; }
 
-    /* ── Export Modal ─────────────────────────────── */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 300; align-items: center; justify-content: center; }
+    .mech-card { display: inline-flex; align-items: center; gap: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 7px; padding: 8px 12px; margin: 4px 4px 4px 0; }
+    .mech-spz { font-size: 0.7rem; font-weight: 700; font-family: monospace; background: var(--slate); color: #fff; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.08em; }
+
+    .btn-download { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-weight: 600; font-size: 0.82rem; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-family: inherit; }
+    .btn-download:hover { background: rgba(255,255,255,0.2); }
+
+    .role-pill { background: rgba(255,255,255,0.15); font-size: 0.68rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.04em; }
+
+    /* Export Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 300; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
-    .modal { background: #fff; border-radius: 18px; width: 520px; max-width: 95vw; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
-    .modal-head { padding: 20px 24px 16px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; }
-    .modal-head h3 { font-size: 1.05rem; font-weight: 800; }
-    .modal-close { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--gray-400); padding: 4px 8px; border-radius: 6px; }
-    .modal-close:hover { background: var(--gray-100); }
-    .modal-body { padding: 20px 24px; }
-    .modal-foot { padding: 14px 24px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 10px; }
+    .modal { background: var(--surface); border-radius: 10px; width: 500px; max-width: 95vw; border: 1px solid var(--border); box-shadow: 0 16px 48px rgba(0,0,0,0.16); }
+    .modal-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .modal-head h3 { font-size: 1rem; font-weight: 700; color: var(--text); }
+    .modal-close { background: none; border: none; font-size: 1rem; cursor: pointer; color: var(--subtle); padding: 4px 7px; border-radius: 5px; }
+    .modal-close:hover { background: var(--bg); color: var(--text); }
+    .modal-body { padding: 18px 22px; }
+    .modal-foot { padding: 12px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
 
-    .exp-section { margin-bottom: 20px; }
-    .exp-section-title { font-size: 0.72rem; font-weight: 800; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+    .exp-section { margin-bottom: 18px; }
+    .exp-section-title { font-size: 0.68rem; font-weight: 600; color: var(--subtle); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+    .radio-group { display: flex; flex-direction: column; gap: 6px; }
+    .radio-opt { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; }
+    .radio-opt:hover { border-color: var(--green); background: var(--green-bg); }
+    .radio-opt.selected { border-color: var(--green); background: var(--green-bg); }
+    .radio-opt input[type=radio] { accent-color: var(--green); width: 15px; height: 15px; flex-shrink: 0; }
+    .radio-opt-label { font-size: 0.84rem; font-weight: 600; color: var(--text); }
+    .radio-opt-sub { font-size: 0.72rem; color: var(--subtle); margin-top: 1px; }
 
-    .radio-group { display: flex; flex-direction: column; gap: 8px; }
-    .radio-opt { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: 9px; cursor: pointer; transition: all .1s; }
-    .radio-opt:hover { border-color: var(--teal); background: var(--teal-50); }
-    .radio-opt.selected { border-color: var(--teal); background: var(--teal-50); }
-    .radio-opt input[type=radio] { accent-color: var(--teal); width: 16px; height: 16px; flex-shrink: 0; }
-    .radio-opt-label { font-size: 0.875rem; font-weight: 600; color: var(--gray-800); }
-    .radio-opt-sub { font-size: 0.75rem; color: var(--gray-400); margin-top: 1px; }
-
-    .custom-range { display: none; gap: 10px; align-items: center; margin-top: 8px; padding: 10px 14px; background: var(--gray-50); border-radius: 8px; }
+    .custom-range { display: none; gap: 10px; align-items: center; margin-top: 6px; padding: 10px 12px; background: var(--bg); border-radius: 6px; border: 1px solid var(--border); }
     .custom-range.show { display: flex; }
-    .custom-range label { font-size: 0.8rem; font-weight: 600; color: var(--gray-600); white-space: nowrap; }
-    .custom-range input[type=date] { border: 1.5px solid var(--gray-200); border-radius: 7px; padding: 6px 10px; font-size: 0.82rem; font-family: inherit; outline: none; }
-    .custom-range input[type=date]:focus { border-color: var(--teal); }
+    .custom-range label { font-size: 0.8rem; font-weight: 500; color: var(--muted); white-space: nowrap; }
+    .custom-range input[type=date] { border: 1px solid var(--border); border-radius: 6px; padding: 5px 9px; font-size: 0.8rem; font-family: inherit; outline: none; }
+    .custom-range input[type=date]:focus { border-color: var(--green); }
 
     .checks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-    .check-opt { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1.5px solid var(--gray-200); border-radius: 8px; cursor: pointer; }
-    .check-opt:hover { border-color: var(--teal); background: var(--teal-50); }
-    .check-opt input[type=checkbox] { accent-color: var(--teal); width: 15px; height: 15px; flex-shrink: 0; }
-    .check-opt span { font-size: 0.82rem; font-weight: 600; color: var(--gray-700); }
+    .check-opt { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; }
+    .check-opt:hover { border-color: var(--green); background: var(--green-bg); }
+    .check-opt input[type=checkbox] { accent-color: var(--green); width: 14px; height: 14px; flex-shrink: 0; }
+    .check-opt span { font-size: 0.8rem; font-weight: 500; color: var(--muted); }
 
-    .btn-cancel-modal { background: var(--gray-100); border: 1.5px solid var(--gray-200); color: var(--gray-700); padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.875rem; cursor: pointer; font-family: inherit; }
-    .btn-cancel-modal:hover { background: var(--gray-200); }
-    .btn-gen-pdf { background: var(--teal); color: #fff; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 700; font-size: 0.875rem; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 7px; }
-    .btn-gen-pdf:hover { background: #0d6b63; }
-
-    .pdf-info { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #eff6ff; border-radius: 8px; font-size: 0.8rem; color: #1e40af; margin-top: 16px; }
+    .pdf-info { display: flex; align-items: center; gap: 8px; padding: 9px 12px; background: #eff6ff; border-radius: 6px; font-size: 0.78rem; color: #1e40af; margin-top: 14px; border: 1px solid #bfdbfe; }
   </style>
 </head>
 <body>
 
 <div class="topbar">
   <div class="topbar-left">
-    <a href="dashboard-nadrizeny.html" class="topbar-logo"><span>🏗️</span> Stavební deník</a>
+    <a href="dashboard-nadrizeny.html" class="topbar-logo">
+      <img src="logo.jpg" class="topbar-logo-img" alt="I. Kamenická stavební" />
+      Stavební deník
+    </a>
     <div class="breadcrumb">
       / <a href="dashboard-nadrizeny.html">Všechny stavby</a>
       / <strong>Bytový dům Prosecká</strong>
     </div>
   </div>
   <div class="topbar-right">
-    <span class="role-badge">Nadřízený</span>
-    <div class="avatar">PM</div>
-    <span style="font-size:.85rem">Petr Mrázek</span>
-    <button class="btn-download" onclick="openExportModal()">⬇ Stáhnout PDF</button>
+    <span class="role-pill">Nadřízený</span>
+    <div class="topbar-user"><div class="avatar-top">PM</div><span>Petr Mrázek</span></div>
+    <button class="btn-download" onclick="openExportModal()">Stáhnout PDF</button>
   </div>
 </div>
 
 <div class="layout">
   <aside class="day-sidebar">
     <div class="day-sidebar-header">
-      <h3>📖 Záznamy deníku</h3>
+      <div class="day-sidebar-title">Záznamy deníku</div>
       <div class="month-nav">
         <button>‹</button>
         <span class="month-label">Duben 2025</span>
@@ -163,9 +149,9 @@
     <div class="stavba-info">
       <span class="stavba-info-name">Bytový dům Prosecká</span>
       <span class="badge-sm">Probíhá</span>
-      <span class="stavba-info-item">📍 Prosecká 14, Praha 9</span>
-      <span class="stavba-info-item">🗓 Zahájení: 3. 2. 2025</span>
-      <span class="stavba-info-item">👷 Stavbyvedoucí: Jan Novák</span>
+      <span class="stavba-info-item">Prosecká 14, Praha 9</span>
+      <span class="stavba-info-item">Zahájení: 3. 2. 2025</span>
+      <span class="stavba-info-item">Stavbyvedoucí: Jan Novák</span>
     </div>
 
     <div class="day-content" id="day-content">
@@ -174,11 +160,11 @@
   </main>
 </div>
 
-<!-- ── Export Modal ──────────────────────────────────── -->
+<!-- Export Modal -->
 <div class="modal-overlay" id="export-modal">
   <div class="modal">
     <div class="modal-head">
-      <h3>⬇ Stáhnout deník jako PDF</h3>
+      <h3>Stáhnout deník jako PDF</h3>
       <button class="modal-close" onclick="closeExportModal()">✕</button>
     </div>
     <div class="modal-body">
@@ -190,7 +176,7 @@
           <label class="radio-opt selected" id="opt-day">
             <input type="radio" name="range" value="day" checked onchange="onRangeChange()" />
             <div>
-              <div class="radio-opt-label">📄 Aktuální záznam</div>
+              <div class="radio-opt-label">Aktuální záznam</div>
               <div class="radio-opt-sub" id="opt-day-sub">Středa 23. dubna 2025</div>
             </div>
           </label>
@@ -198,7 +184,7 @@
           <label class="radio-opt" id="opt-month">
             <input type="radio" name="range" value="month" onchange="onRangeChange()" />
             <div>
-              <div class="radio-opt-label">📅 Celý měsíc</div>
+              <div class="radio-opt-label">Celý měsíc</div>
               <div class="radio-opt-sub">Duben 2025 — všechny záznamy (13 dnů)</div>
             </div>
           </label>
@@ -206,7 +192,7 @@
           <label class="radio-opt" id="opt-all">
             <input type="radio" name="range" value="all" onchange="onRangeChange()" />
             <div>
-              <div class="radio-opt-label">📚 Celý deník</div>
+              <div class="radio-opt-label">Celý deník</div>
               <div class="radio-opt-sub">Od zahájení stavby — všechny záznamy</div>
             </div>
           </label>
@@ -214,7 +200,7 @@
           <label class="radio-opt" id="opt-custom">
             <input type="radio" name="range" value="custom" onchange="onRangeChange()" />
             <div>
-              <div class="radio-opt-label">🗓 Vlastní rozsah</div>
+              <div class="radio-opt-label">Vlastní rozsah</div>
               <div class="radio-opt-sub">Zvolte datum od – do</div>
             </div>
           </label>
@@ -231,41 +217,23 @@
       <div class="exp-section">
         <div class="exp-section-title">Co zahrnout</div>
         <div class="checks-grid">
-          <label class="check-opt">
-            <input type="checkbox" id="inc-weather" checked />
-            <span>🌤 Počasí</span>
-          </label>
-          <label class="check-opt">
-            <input type="checkbox" id="inc-workers" checked />
-            <span>👷 Pracovníci</span>
-          </label>
-          <label class="check-opt">
-            <input type="checkbox" id="inc-mech" checked />
-            <span>🚜 Mechanizace</span>
-          </label>
-          <label class="check-opt">
-            <input type="checkbox" id="inc-work" checked />
-            <span>🔨 Prováděné práce</span>
-          </label>
-          <label class="check-opt">
-            <input type="checkbox" id="inc-sign" checked />
-            <span>✍️ Podpisové řádky</span>
-          </label>
-          <label class="check-opt">
-            <input type="checkbox" id="inc-summary" checked />
-            <span>📊 Souhrnná tabulka</span>
-          </label>
+          <label class="check-opt"><input type="checkbox" id="inc-weather" checked /><span>Počasí</span></label>
+          <label class="check-opt"><input type="checkbox" id="inc-workers" checked /><span>Pracovníci</span></label>
+          <label class="check-opt"><input type="checkbox" id="inc-mech" checked /><span>Mechanizace</span></label>
+          <label class="check-opt"><input type="checkbox" id="inc-work" checked /><span>Prováděné práce</span></label>
+          <label class="check-opt"><input type="checkbox" id="inc-sign" checked /><span>Podpisové řádky</span></label>
+          <label class="check-opt"><input type="checkbox" id="inc-summary" checked /><span>Souhrnná tabulka</span></label>
         </div>
       </div>
 
       <div class="pdf-info">
-        ℹ️ V dialogu tisku zvolte <strong>„Uložit jako PDF"</strong> (nebo Ctrl+P → PDF). Formát A4, na výšku.
+        V dialogu tisku zvolte <strong>„Uložit jako PDF"</strong> (nebo Ctrl+P → PDF). Formát A4, na výšku.
       </div>
 
     </div>
     <div class="modal-foot">
-      <button class="btn-cancel-modal" onclick="closeExportModal()">Zrušit</button>
-      <button class="btn-gen-pdf" onclick="generatePDF()">⬇ Generovat a stáhnout PDF</button>
+      <button class="btn-secondary" onclick="closeExportModal()">Zrušit</button>
+      <button class="btn-primary" onclick="generatePDF()">Generovat a stáhnout PDF</button>
     </div>
   </div>
 </div>
@@ -408,7 +376,7 @@ function renderEntry(e) {
     </div>
 
     <div class="section">
-      <div class="section-title">🌤 Počasí</div>
+      <div class="section-title">Počasí</div>
       <div class="weather-chips">
         ${['☀️ Slunečno','⛅ Polojasno','☁️ Zataženo','🌦 Přeháňky','🌧 Déšť','⛈ Bouřka','🌨 Sníh','🌫 Mlha','🥶 Mráz','💨 Silný vítr']
           .map(c => `<span class="weather-chip${e.w.includes(c)?' active':''}">${c}</span>`).join('')}
@@ -417,7 +385,7 @@ function renderEntry(e) {
     </div>
 
     <div class="section">
-      <div class="section-title">👷 Pracovníci na stavbě</div>
+      <div class="section-title">Pracovníci na stavbě</div>
       <table class="workers-table">
         <thead><tr><th>Počet</th><th>Profese</th><th>Firma</th></tr></thead>
         <tbody>
@@ -433,13 +401,13 @@ function renderEntry(e) {
 
     ${e.mech.length ? `
     <div class="section">
-      <div class="section-title">🚜 Mechanizace a technika</div>
+      <div class="section-title">Mechanizace a technika</div>
       <div>${e.mech.map(m => `
         <div class="mech-card">
           <span>${m.icon}</span>
           <div>
-            <div style="font-size:.875rem;font-weight:700">${m.name}</div>
-            <div style="font-size:.75rem;color:#64748b">${m.type}</div>
+            <div style="font-size:.875rem;font-weight:700;color:var(--text)">${m.name}</div>
+            <div style="font-size:.75rem;color:var(--subtle)">${m.type}</div>
           </div>
           <span class="mech-spz">${m.spz}</span>
         </div>`).join('')}
@@ -447,7 +415,7 @@ function renderEntry(e) {
     </div>` : ''}
 
     <div class="section">
-      <div class="section-title">🔨 Prováděné práce</div>
+      <div class="section-title">Prováděné práce</div>
       ${e.work.map((w, i) => `
         <div class="work-item">
           <div class="work-num">Práce č. ${i + 1}</div>
@@ -498,7 +466,6 @@ function generatePDF() {
   const incS   = document.getElementById('inc-sign').checked;
   const incSum = document.getElementById('inc-summary').checked;
 
-  // Vyber záznamy dle rozsahu
   let entries;
   if (range === 'day') {
     entries = ENTRIES.filter(e => e.key === activeKey);
@@ -520,10 +487,9 @@ function generatePDF() {
   const now = new Date().toLocaleDateString('cs-CZ', {day:'numeric', month:'long', year:'numeric'});
   const totalWorkerDays = entries.reduce((s, e) => s + e.workers.reduce((ss, w) => ss + w.n, 0), 0);
 
-  // Souhrnná tabulka
   const summaryTable = incSum ? `
     <div style="margin-bottom:24px; page-break-inside:avoid;">
-      <h3 style="font-size:10pt; font-weight:700; margin-bottom:8px; color:#134e4a;">Souhrn exportovaného období</h3>
+      <h3 style="font-size:10pt; font-weight:700; margin-bottom:8px; color:#166534;">Souhrn exportovaného období</h3>
       <table style="width:100%; border-collapse:collapse; font-size:9pt;">
         <tr style="background:#f1f5f9;">
           <th style="text-align:left; padding:6px 10px; border:1px solid #e2e8f0;">Ukazatel</th>
@@ -536,7 +502,6 @@ function generatePDF() {
     </div>
   ` : '';
 
-  // Záznamy
   const entriesHTML = entries.map((e, ei) => {
     const total = e.workers.reduce((s, w) => s + w.n, 0);
 
@@ -630,9 +595,9 @@ function generatePDF() {
     const isLast = ei === entries.length - 1;
     return `
       <div style="border:1px solid #e2e8f0; border-radius:6px; padding:16px 18px; margin-bottom:20px; ${isLast ? '' : 'page-break-after:auto;'}">
-        <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px solid #134e4a; padding-bottom:8px; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px solid #166534; padding-bottom:8px; margin-bottom:14px;">
           <div>
-            <span style="font-size:12pt; font-weight:800; color:#134e4a;">${e.label}</span>
+            <span style="font-size:12pt; font-weight:800; color:#166534;">${e.label}</span>
             <span style="font-size:9pt; color:#64748b; margin-left:10px;">Den č. ${e.dayNum}</span>
           </div>
           <span style="font-size:9pt; color:#64748b;">${e.w.join(', ')}</span>
@@ -641,7 +606,6 @@ function generatePDF() {
       </div>`;
   }).join('');
 
-  // Sestavení celého dokumentu
   const html = `<!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -657,16 +621,15 @@ function generatePDF() {
   </style>
 </head>
 <body>
-  <!-- Hlavička dokumentu -->
   <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #134e4a; padding-bottom:12px; margin-bottom:18px;">
     <div>
-      <div style="font-size:16pt; font-weight:800; color:#134e4a; letter-spacing:-.02em;">STAVEBNÍ DENÍK</div>
+      <div style="font-size:16pt; font-weight:800; color:#166534; letter-spacing:-.02em;">STAVEBNÍ DENÍK</div>
       <div style="font-size:11pt; font-weight:700; color:#1e293b; margin-top:4px;">${SITE.name}</div>
-      <div style="font-size:9pt; color:#64748b; margin-top:2px;">📍 ${SITE.addr} &nbsp;·&nbsp; Zahájení: ${SITE.start}</div>
-      <div style="font-size:9pt; color:#64748b; margin-top:1px;">👷 Stavbyvedoucí: <strong>${SITE.mgr}</strong> &nbsp;·&nbsp; Investor: ${SITE.investor}</div>
+      <div style="font-size:9pt; color:#64748b; margin-top:2px;">${SITE.addr} &nbsp;·&nbsp; Zahájení: ${SITE.start}</div>
+      <div style="font-size:9pt; color:#64748b; margin-top:1px;">Stavbyvedoucí: <strong>${SITE.mgr}</strong> &nbsp;·&nbsp; Investor: ${SITE.investor}</div>
     </div>
     <div style="text-align:right; font-size:8pt; color:#64748b;">
-      <div style="font-size:9pt; font-weight:700; color:#134e4a;">Export deníku</div>
+      <div style="font-size:9pt; font-weight:700; color:#166534;">Export deníku</div>
       <div>Vytisknuto: ${now}</div>
       <div>Záznamy: ${entries.length} dnů</div>
       <div>Stavební deník v2</div>
@@ -676,7 +639,6 @@ function generatePDF() {
   ${summaryTable}
   ${entriesHTML}
 
-  <!-- Patička -->
   <div style="border-top:1px solid #e2e8f0; margin-top:24px; padding-top:8px; font-size:7.5pt; color:#94a3b8; display:flex; justify-content:space-between;">
     <span>Stavební deník — ${SITE.name} — ${SITE.addr}</span>
     <span>Exportoval: Petr Mrázek (Nadřízený) · ${now}</span>

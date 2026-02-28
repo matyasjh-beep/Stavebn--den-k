@@ -2,161 +2,97 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Stavební deník – Přehled vedení</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --blue:    #1e40af;
-      --blue-d:  #1e3a8a;
-      --blue-l:  #dbeafe;
-      --blue-50: #eff6ff;
-      --teal:    #0f766e;
-      --teal-l:  #ccfbf1;
-      --orange:  #ea580c;
-      --green:   #15803d;
-      --green-l: #dcfce7;
-      --gray-50: #f8fafc;
-      --gray-100:#f1f5f9;
-      --gray-200:#e2e8f0;
-      --gray-400:#94a3b8;
-      --gray-600:#475569;
-      --gray-700:#334155;
-      --gray-800:#1e293b;
-    }
-    body { font-family: system-ui, sans-serif; background: var(--gray-100); color: var(--gray-800); }
+    .main { padding: 24px 28px; }
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
 
-    /* Topbar */
-    .topbar { background: #134e4a; color: #fff; padding: 0 24px; height: 58px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-    .topbar-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.05rem; }
-    .topbar-logo span { font-size: 1.4rem; }
-    .role-badge { background: rgba(255,255,255,0.18); font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 100px; letter-spacing: 0.04em; }
-    .topbar-right { display: flex; align-items: center; gap: 14px; }
-    .topbar-user { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; }
-    .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--teal); border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; }
-    .topbar-btn { background: rgba(255,255,255,0.15); border: none; color: #fff; padding: 6px 14px; border-radius: 6px; font-size: 0.82rem; cursor: pointer; font-family: inherit; font-weight: 600; }
-    .topbar-btn:hover { background: rgba(255,255,255,0.25); }
+    .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+    .stat-label { font-size: 0.68rem; font-weight: 600; color: var(--subtle); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .stat-value { font-size: 1.6rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; line-height: 1; }
+    .stat-value.green { color: var(--green); }
+    .stat-value.orange { color: var(--orange); }
+    .stat-sub { font-size: 0.72rem; color: var(--subtle); margin-top: 4px; }
 
-    /* Layout */
-    .layout { display: flex; min-height: calc(100vh - 58px); }
-    .sidebar { width: 220px; background: #fff; border-right: 1px solid var(--gray-200); padding: 20px 0; flex-shrink: 0; }
-    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 0.875rem; font-weight: 500; color: var(--gray-600); cursor: pointer; transition: background 0.1s; text-decoration: none; }
-    .nav-item:hover { background: var(--gray-100); color: var(--gray-800); }
-    .nav-item.active { background: #f0fdfa; color: var(--teal); font-weight: 700; border-right: 3px solid var(--teal); }
-    .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
-    .nav-section { font-size: 0.7rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.08em; padding: 16px 20px 6px; }
-    .main { flex: 1; padding: 28px 32px; }
-
-    /* Page header */
-    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-    .page-title { font-size: 1.4rem; font-weight: 800; color: var(--gray-800); }
-    .page-title span { color: var(--gray-400); font-weight: 400; font-size: 1rem; margin-left: 8px; }
-
-    /* Stats */
-    .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 28px; }
-    .stat-card { background: #fff; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-    .stat-label { font-size: 0.78rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-    .stat-value { font-size: 1.8rem; font-weight: 800; color: var(--gray-800); }
-    .stat-sub { font-size: 0.78rem; color: var(--gray-400); margin-top: 2px; }
-    .stat-card.teal .stat-value { color: var(--teal); }
-    .stat-card.blue .stat-value { color: var(--blue); }
-    .stat-card.orange .stat-value { color: var(--orange); }
-    .stat-card.green .stat-value { color: var(--green); }
-
-    /* Toolbar */
-    .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-    .filter-btn { padding: 6px 16px; border-radius: 100px; border: 1.5px solid var(--gray-200); background: #fff; font-size: 0.82rem; font-weight: 600; cursor: pointer; color: var(--gray-600); font-family: inherit; transition: all 0.1s; }
-    .filter-btn:hover { border-color: var(--teal); color: var(--teal); }
-    .filter-btn.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+    .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-btn { padding: 5px 14px; border-radius: 5px; border: 1px solid var(--border); background: var(--surface); font-size: 0.78rem; font-weight: 500; cursor: pointer; color: var(--muted); font-family: inherit; }
+    .filter-btn:hover { border-color: var(--border-2); color: var(--text); }
+    .filter-btn.active { background: var(--slate); color: #fff; border-color: var(--slate); }
     .toolbar-sep { flex: 1; }
-    .mgr-select { border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 7px 12px; font-size: 0.85rem; font-family: inherit; outline: none; background: #fff; color: var(--gray-700); cursor: pointer; }
-    .mgr-select:focus { border-color: var(--teal); }
-    .search-input { border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 7px 12px; font-size: 0.85rem; font-family: inherit; outline: none; width: 200px; }
-    .search-input:focus { border-color: var(--teal); }
+    .mgr-select, .search-input { border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; font-size: 0.84rem; font-family: inherit; outline: none; color: var(--text); background: var(--surface); }
+    .mgr-select:focus, .search-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(46,139,46,0.14); }
+    .search-input { width: 200px; }
 
-    /* Grid */
-    .stavby-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-    .stavba-card { background: #fff; border-radius: 14px; box-shadow: 0 1px 6px rgba(0,0,0,0.07); overflow: hidden; transition: all 0.2s; text-decoration: none; color: inherit; display: block; }
-    .stavba-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.12); transform: translateY(-1px); }
-    .stavba-header { padding: 16px 18px 12px; border-bottom: 1px solid var(--gray-100); display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-    .stavba-name { font-weight: 800; font-size: 1rem; color: var(--gray-800); margin-bottom: 2px; }
-    .stavba-addr { font-size: 0.8rem; color: var(--gray-400); }
-    .badge { font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 100px; white-space: nowrap; flex-shrink: 0; }
-    .badge.probiha   { background: var(--green-l);  color: var(--green); }
-    .badge.priprava  { background: var(--blue-l);   color: var(--blue); }
-    .badge.pozastavena { background: #fef3c7; color: #92400e; }
-    .badge.dokonceno { background: #f3f4f6; color: #374151; }
-    .stavba-body { padding: 14px 18px; }
-    .stavba-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin-bottom: 12px; }
-    .meta-label { font-size: 0.72rem; color: var(--gray-400); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
-    .meta-value { font-size: 0.82rem; font-weight: 600; color: var(--gray-700); margin-top: 1px; }
-    .manager-row { display: flex; align-items: center; gap: 7px; margin-bottom: 12px; padding: 7px 10px; background: var(--gray-50); border-radius: 7px; }
-    .manager-avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 0.65rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .manager-avatar.teal { background: var(--teal); }
-    .manager-avatar.orange { background: var(--orange); }
-    .manager-name { font-size: 0.8rem; font-weight: 600; color: var(--gray-700); }
-    .manager-role { font-size: 0.72rem; color: var(--gray-400); }
-    .progress-bar-wrap { margin-bottom: 0; }
-    .progress-label { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--gray-400); margin-bottom: 4px; }
-    .progress-bar { height: 6px; background: var(--gray-200); border-radius: 100px; overflow: hidden; }
-    .progress-fill { height: 100%; border-radius: 100px; background: var(--teal); }
-    .progress-fill.done { background: var(--gray-400); }
-    .stavba-footer { padding: 10px 18px; border-top: 1px solid var(--gray-100); display: flex; justify-content: space-between; align-items: center; }
-    .last-entry { font-size: 0.78rem; color: var(--gray-400); }
-    .last-entry.warn { color: var(--orange); font-weight: 600; }
-    .open-btn { font-size: 0.78rem; font-weight: 700; color: var(--teal); background: #f0fdfa; border: none; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-family: inherit; white-space: nowrap; }
-    .open-btn:hover { background: var(--teal-l); }
+    .stavby-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; }
+    .stavba-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; text-decoration: none; color: inherit; display: block; cursor: pointer; transition: box-shadow 0.15s, border-color 0.15s; }
+    .stavba-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.07); border-color: var(--border-2); }
+    .stavba-header { padding: 14px 16px 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .stavba-name { font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 2px; }
+    .stavba-addr { font-size: 0.76rem; color: var(--subtle); }
+    .stavba-body { padding: 12px 16px; }
+    .stavba-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; margin-bottom: 12px; }
+    .meta-label { font-size: 0.65rem; color: var(--subtle); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    .meta-value { font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-top: 2px; }
+    .manager-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding: 7px 10px; background: var(--bg); border-radius: 6px; border: 1px solid var(--border); }
+    .manager-avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--slate); color: #fff; font-size: 0.65rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .manager-name { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+    .manager-role { font-size: 0.7rem; color: var(--subtle); }
+    .progress-bar { height: 4px; background: var(--border); border-radius: 100px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 100px; background: var(--green); }
+    .progress-fill.done { background: var(--subtle); }
+    .stavba-footer { padding: 9px 16px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .last-entry { font-size: 0.76rem; color: var(--subtle); }
+    .last-entry.warn { color: var(--orange); font-weight: 500; }
+    .open-btn { font-size: 0.76rem; font-weight: 600; color: var(--green-d); background: var(--green-bg); border: 1px solid var(--green-b); padding: 4px 10px; border-radius: 5px; cursor: pointer; font-family: inherit; }
+    .open-btn:hover { background: var(--green-b); }
+    .no-results { text-align: center; padding: 60px 20px; color: var(--subtle); grid-column: 1 / -1; font-size: 0.88rem; }
 
-    /* No results */
-    .no-results { text-align: center; padding: 60px 20px; color: var(--gray-400); grid-column: 1 / -1; }
-    .no-results-icon { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+    .role-pill { background: rgba(255,255,255,0.15); font-size: 0.68rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.04em; margin-left: 6px; }
   </style>
 </head>
 <body>
-
 <div class="topbar">
-  <div class="topbar-logo">
-    <span>🏗️</span> Stavební deník
-    <span class="role-badge">Nadřízený</span>
-  </div>
+  <a href="dashboard-nadrizeny.html" class="topbar-logo">
+    <img src="logo.jpg" class="topbar-logo-img" alt="I. Kamenická stavební" />
+    Stavební deník
+    <span class="role-pill">Nadřízený</span>
+  </a>
   <div class="topbar-right">
-    <div class="topbar-user">
-      <div class="avatar">PM</div>
-      <span>Petr Mrázek</span>
-    </div>
+    <div class="topbar-user"><div class="avatar-top">PM</div><span>Petr Mrázek</span></div>
     <button class="topbar-btn" onclick="window.location='index.html'">Odhlásit</button>
   </div>
 </div>
-
 <div class="layout">
   <aside class="sidebar">
     <div class="nav-section">Přehled</div>
-    <a class="nav-item active" href="dashboard-nadrizeny.html"><span class="nav-icon">📊</span> Všechny stavby</a>
-    <a class="nav-item" href="kalendar.html"><span class="nav-icon">📅</span> Kalendář</a>
+    <a class="nav-item active" href="dashboard-nadrizeny.html"><span class="nav-dot"></span> Všechny stavby</a>
+    <a class="nav-item" href="kalendar.html"><span class="nav-dot"></span> Kalendář</a>
+    <a class="nav-item" href="prehled.html"><span class="nav-dot"></span> Výkazy</a>
     <div class="nav-section">Stavbyvedoucí</div>
-    <a class="nav-item" href="#" onclick="filterByMgr('Jan Novák'); return false;"><span class="nav-icon">👷</span> Jan Novák</a>
-    <a class="nav-item" href="#" onclick="filterByMgr('Petra Horáková'); return false;"><span class="nav-icon">👷</span> Petra Horáková</a>
-    <a class="nav-item" href="#" onclick="filterByMgr('Martin Kovář'); return false;"><span class="nav-icon">👷</span> Martin Kovář</a>
+    <a class="nav-item" href="#" onclick="filterByMgr('Jan Novák'); return false;"><span class="nav-dot"></span> Jan Novák</a>
+    <a class="nav-item" href="#" onclick="filterByMgr('Petra Horáková'); return false;"><span class="nav-dot"></span> Petra Horáková</a>
+    <a class="nav-item" href="#" onclick="filterByMgr('Martin Kovář'); return false;"><span class="nav-dot"></span> Martin Kovář</a>
     <div class="nav-section">Firma</div>
-    <a class="nav-item" href="#"><span class="nav-icon">👥</span> Tým</a>
-    <a class="nav-item" href="#"><span class="nav-icon">📈</span> Výkazy</a>
+    <a class="nav-item" href="pracovnici.html"><span class="nav-dot"></span> Tým</a>
     <div class="nav-section">Nastavení</div>
-    <a class="nav-item" href="#"><span class="nav-icon">⚙️</span> Nastavení firmy</a>
-    <a class="nav-item" href="#"><span class="nav-icon">👤</span> Profil</a>
+    <a class="nav-item" href="nastaveni.html"><span class="nav-dot"></span> Nastavení firmy</a>
+    <a class="nav-item" href="profil.html"><span class="nav-dot"></span> Profil</a>
   </aside>
-
   <main class="main">
     <div class="page-header">
-      <div class="page-title">Přehled všech staveb <span>celá firma</span></div>
+      <div class="page-title">Přehled všech staveb <span style="color:var(--subtle);font-weight:400;font-size:1rem;margin-left:8px">celá firma</span></div>
     </div>
-
     <div class="stats">
-      <div class="stat-card teal">
+      <div class="stat-card">
         <div class="stat-label">Celkem staveb</div>
-        <div class="stat-value">9</div>
+        <div class="stat-value green">9</div>
         <div class="stat-sub">ve správě firmy</div>
       </div>
-      <div class="stat-card blue">
+      <div class="stat-card">
         <div class="stat-label">Probíhající</div>
         <div class="stat-value">5</div>
         <div class="stat-sub">aktivní stavby</div>
@@ -166,18 +102,17 @@
         <div class="stat-value">3</div>
         <div class="stat-sub">aktivní pracovníci</div>
       </div>
-      <div class="stat-card orange">
+      <div class="stat-card">
         <div class="stat-label">Bez záznamu</div>
-        <div class="stat-value">2</div>
+        <div class="stat-value orange">2</div>
         <div class="stat-sub">posledních 7 dní</div>
       </div>
-      <div class="stat-card green">
+      <div class="stat-card">
         <div class="stat-label">Dokončeno letos</div>
         <div class="stat-value">2</div>
         <div class="stat-sub">stavby 2025</div>
       </div>
     </div>
-
     <div class="toolbar">
       <button class="filter-btn active" onclick="filterStatus('vse', this)">Vše (9)</button>
       <button class="filter-btn" onclick="filterStatus('probiha', this)">Probíhající (5)</button>
@@ -190,166 +125,64 @@
         <option value="Petra Horáková">Petra Horáková</option>
         <option value="Martin Kovář">Martin Kovář</option>
       </select>
-      <input class="search-input" id="search-input" placeholder="🔍  Hledat stavbu…" oninput="applyFilters()" />
+      <input class="search-input" id="search-input" placeholder="Hledat stavbu…" oninput="applyFilters()" />
     </div>
-
     <div class="stavby-grid" id="stavby-grid"></div>
   </main>
 </div>
-
 <script>
   const SITES = [
-    {
-      id:1, name:'Bytový dům Prosecká', addr:'Prosecká 14, Praha 9',
-      status:'probiha', statusLabel:'Probíhá',
-      start:'3. 2. 2025', end:'30. 11. 2025',
-      mgr:'Jan Novák', mgrAbbr:'JN', mgrColor:'blue',
-      investor:'Prosecká s.r.o.', progress:38,
-      lastEntry:'dnes', lastWarn:false,
-    },
-    {
-      id:2, name:'Rekonstrukce RD Beroun', addr:'Palackého 7, Beroun',
-      status:'probiha', statusLabel:'Probíhá',
-      start:'15. 3. 2025', end:'31. 7. 2025',
-      mgr:'Jan Novák', mgrAbbr:'JN', mgrColor:'blue',
-      investor:'Pavel Kratochvíl', progress:62,
-      lastEntry:'včera', lastWarn:false,
-    },
-    {
-      id:3, name:'Průmyslová hala Kladno', addr:'Průmyslová 22, Kladno',
-      status:'probiha', statusLabel:'Probíhá',
-      start:'10. 1. 2025', end:'28. 2. 2026',
-      mgr:'Jan Novák', mgrAbbr:'JN', mgrColor:'blue',
-      investor:'Kladno Industry a.s.', progress:22,
-      lastEntry:'21. 4. 2025', lastWarn:true,
-    },
-    {
-      id:4, name:'Obchodní centrum Nymburk', addr:'Náměstí 1, Nymburk',
-      status:'priprava', statusLabel:'Příprava',
-      start:'1. 5. 2025', end:'31. 3. 2026',
-      mgr:'Jan Novák', mgrAbbr:'JN', mgrColor:'blue',
-      investor:'Nymburk Invest s.r.o.', progress:0,
-      lastEntry:'bez záznamu', lastWarn:false,
-    },
-    {
-      id:5, name:'Rodinný dům Říčany', addr:'Ke Kašně 8, Říčany',
-      status:'probiha', statusLabel:'Probíhá',
-      start:'20. 2. 2025', end:'15. 8. 2025',
-      mgr:'Petra Horáková', mgrAbbr:'PH', mgrColor:'teal',
-      investor:'Rodina Procházková', progress:75,
-      lastEntry:'dnes', lastWarn:false,
-    },
-    {
-      id:6, name:'Rekonstrukce bytu Praha 2', addr:'Mánesova 22, Praha 2',
-      status:'dokonceno', statusLabel:'Dokončeno',
-      start:'5. 1. 2025', end:'10. 4. 2025',
-      mgr:'Petra Horáková', mgrAbbr:'PH', mgrColor:'teal',
-      investor:'Jiří Kout', progress:100,
-      lastEntry:'10. 4. 2025', lastWarn:false,
-    },
-    {
-      id:7, name:'Administrativní budova Brno', addr:'Příkop 4, Brno',
-      status:'probiha', statusLabel:'Probíhá',
-      start:'1. 3. 2025', end:'30. 6. 2026',
-      mgr:'Martin Kovář', mgrAbbr:'MK', mgrColor:'orange',
-      investor:'BrnoBuild s.r.o.', progress:18,
-      lastEntry:'22. 4. 2025', lastWarn:false,
-    },
-    {
-      id:8, name:'Logistické centrum Pardubice', addr:'Dělnická 55, Pardubice',
-      status:'priprava', statusLabel:'Příprava',
-      start:'15. 5. 2025', end:'31. 12. 2026',
-      mgr:'Martin Kovář', mgrAbbr:'MK', mgrColor:'orange',
-      investor:'Logistic East a.s.', progress:3,
-      lastEntry:'bez záznamu', lastWarn:false,
-    },
-    {
-      id:9, name:'Bytový dům Modřany', addr:'Komořanská 14, Praha 12',
-      status:'dokonceno', statusLabel:'Dokončeno',
-      start:'15. 4. 2024', end:'28. 2. 2025',
-      mgr:'Petra Horáková', mgrAbbr:'PH', mgrColor:'teal',
-      investor:'Modřany Reality a.s.', progress:100,
-      lastEntry:'28. 2. 2025', lastWarn:false,
-    },
+    { id:1, name:'Bytový dům Prosecká', addr:'Prosecká 14, Praha 9', status:'probiha', statusLabel:'Probíhá', start:'3. 2. 2025', end:'30. 11. 2025', mgr:'Jan Novák', mgrAbbr:'JN', investor:'Prosecká s.r.o.', progress:38, lastEntry:'dnes', lastWarn:false },
+    { id:2, name:'Rekonstrukce RD Beroun', addr:'Palackého 7, Beroun', status:'probiha', statusLabel:'Probíhá', start:'15. 3. 2025', end:'31. 7. 2025', mgr:'Jan Novák', mgrAbbr:'JN', investor:'Pavel Kratochvíl', progress:62, lastEntry:'včera', lastWarn:false },
+    { id:3, name:'Průmyslová hala Kladno', addr:'Průmyslová 22, Kladno', status:'probiha', statusLabel:'Probíhá', start:'10. 1. 2025', end:'28. 2. 2026', mgr:'Jan Novák', mgrAbbr:'JN', investor:'Kladno Industry a.s.', progress:22, lastEntry:'21. 4. 2025', lastWarn:true },
+    { id:4, name:'Obchodní centrum Nymburk', addr:'Náměstí 1, Nymburk', status:'priprava', statusLabel:'Příprava', start:'1. 5. 2025', end:'31. 3. 2026', mgr:'Jan Novák', mgrAbbr:'JN', investor:'Nymburk Invest s.r.o.', progress:0, lastEntry:'bez záznamu', lastWarn:false },
+    { id:5, name:'Rodinný dům Říčany', addr:'Ke Kašně 8, Říčany', status:'probiha', statusLabel:'Probíhá', start:'20. 2. 2025', end:'15. 8. 2025', mgr:'Petra Horáková', mgrAbbr:'PH', investor:'Rodina Procházková', progress:75, lastEntry:'dnes', lastWarn:false },
+    { id:6, name:'Rekonstrukce bytu Praha 2', addr:'Mánesova 22, Praha 2', status:'dokonceno', statusLabel:'Dokončeno', start:'5. 1. 2025', end:'10. 4. 2025', mgr:'Petra Horáková', mgrAbbr:'PH', investor:'Jiří Kout', progress:100, lastEntry:'10. 4. 2025', lastWarn:false },
+    { id:7, name:'Administrativní budova Brno', addr:'Příkop 4, Brno', status:'probiha', statusLabel:'Probíhá', start:'1. 3. 2025', end:'30. 6. 2026', mgr:'Martin Kovář', mgrAbbr:'MK', investor:'BrnoBuild s.r.o.', progress:18, lastEntry:'22. 4. 2025', lastWarn:false },
+    { id:8, name:'Logistické centrum Pardubice', addr:'Dělnická 55, Pardubice', status:'priprava', statusLabel:'Příprava', start:'15. 5. 2025', end:'31. 12. 2026', mgr:'Martin Kovář', mgrAbbr:'MK', investor:'Logistic East a.s.', progress:3, lastEntry:'bez záznamu', lastWarn:false },
+    { id:9, name:'Bytový dům Modřany', addr:'Komořanská 14, Praha 12', status:'dokonceno', statusLabel:'Dokončeno', start:'15. 4. 2024', end:'28. 2. 2025', mgr:'Petra Horáková', mgrAbbr:'PH', investor:'Modřany Reality a.s.', progress:100, lastEntry:'28. 2. 2025', lastWarn:false },
   ];
 
   let activeStatus = 'vse';
-  let activeMgr    = '';
 
   function renderSites(sites) {
     const grid = document.getElementById('stavby-grid');
-    if (!sites.length) {
-      grid.innerHTML = `<div class="no-results">
-        <span class="no-results-icon">🔍</span>
-        Žádné stavby neodpovídají filtru.
-      </div>`;
-      return;
-    }
-    grid.innerHTML = sites.map(s => {
-      const statusBadge = `<span class="badge ${s.status}">${s.statusLabel}</span>`;
-      const fillClass   = s.progress === 100 ? ' done' : '';
-      const warnCls     = s.lastWarn ? ' warn' : '';
-      return `<div class="stavba-card" onclick="window.location='denik-nadrizeny.html'">
+    if (!sites.length) { grid.innerHTML = '<div class="no-results">Žádné stavby neodpovídají filtru.</div>'; return; }
+    grid.innerHTML = sites.map(s => `
+      <div class="stavba-card" onclick="window.location='denik-nadrizeny.html'">
         <div class="stavba-header">
-          <div>
-            <div class="stavba-name">${s.name}</div>
-            <div class="stavba-addr">📍 ${s.addr}</div>
-          </div>
-          ${statusBadge}
+          <div><div class="stavba-name">${s.name}</div><div class="stavba-addr">${s.addr}</div></div>
+          <span class="status-badge ${s.status==='probiha'?'green':s.status==='dokonceno'?'gray':'yellow'}">${s.statusLabel}</span>
         </div>
         <div class="stavba-body">
           <div class="manager-row">
-            <div class="manager-avatar ${s.mgrColor}">${s.mgrAbbr}</div>
-            <div>
-              <div class="manager-name">${s.mgr}</div>
-              <div class="manager-role">Stavbyvedoucí</div>
-            </div>
+            <div class="manager-avatar">${s.mgrAbbr}</div>
+            <div><div class="manager-name">${s.mgr}</div><div class="manager-role">Stavbyvedoucí</div></div>
           </div>
           <div class="stavba-meta">
-            <div>
-              <div class="meta-label">Zahájení</div>
-              <div class="meta-value">${s.start}</div>
-            </div>
-            <div>
-              <div class="meta-label">Dokončení</div>
-              <div class="meta-value">${s.end}</div>
-            </div>
-            <div>
-              <div class="meta-label">Investor</div>
-              <div class="meta-value">${s.investor}</div>
-            </div>
-            <div>
-              <div class="meta-label">Průběh</div>
-              <div class="meta-value">${s.progress} %</div>
-            </div>
+            <div><div class="meta-label">Zahájení</div><div class="meta-value">${s.start}</div></div>
+            <div><div class="meta-label">Dokončení</div><div class="meta-value">${s.end}</div></div>
+            <div><div class="meta-label">Investor</div><div class="meta-value">${s.investor}</div></div>
+            <div><div class="meta-label">Průběh</div><div class="meta-value">${s.progress} %</div></div>
           </div>
-          <div class="progress-bar-wrap">
-            <div class="progress-bar">
-              <div class="progress-fill${fillClass}" style="width:${s.progress}%"></div>
-            </div>
-          </div>
+          <div class="progress-bar"><div class="progress-fill${s.progress===100?' done':''}" style="width:${s.progress}%"></div></div>
         </div>
         <div class="stavba-footer">
-          <div class="last-entry${warnCls}">📝 Poslední záznam: ${s.lastEntry}</div>
+          <div class="last-entry${s.lastWarn?' warn':''}">Poslední záznam: ${s.lastEntry}${s.lastWarn?' — upozornění':''}</div>
           <button class="open-btn" onclick="event.stopPropagation(); window.location='denik-nadrizeny.html'">
-            ${s.status === 'dokonceno' ? '⬇ Stáhnout deník' : '👁 Zobrazit deník'} →
+            ${s.status==='dokonceno'?'Stáhnout deník':'Zobrazit deník'} →
           </button>
         </div>
-      </div>`;
-    }).join('');
+      </div>`).join('');
   }
 
   function applyFilters() {
     const search = document.getElementById('search-input').value.toLowerCase();
-    const mgr    = document.getElementById('mgr-filter').value;
+    const mgr = document.getElementById('mgr-filter').value;
     let filtered = SITES;
     if (activeStatus !== 'vse') filtered = filtered.filter(s => s.status === activeStatus);
-    if (mgr)   filtered = filtered.filter(s => s.mgr === mgr);
-    if (search) filtered = filtered.filter(s =>
-      s.name.toLowerCase().includes(search) ||
-      s.addr.toLowerCase().includes(search) ||
-      s.mgr.toLowerCase().includes(search)
-    );
+    if (mgr) filtered = filtered.filter(s => s.mgr === mgr);
+    if (search) filtered = filtered.filter(s => s.name.toLowerCase().includes(search) || s.addr.toLowerCase().includes(search) || s.mgr.toLowerCase().includes(search));
     renderSites(filtered);
   }
 
@@ -362,7 +195,6 @@
 
   function filterByMgr(name) {
     document.getElementById('mgr-filter').value = name;
-    activeMgr = name;
     applyFilters();
   }
 
