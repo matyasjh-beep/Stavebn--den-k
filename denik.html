@@ -241,12 +241,12 @@
       <span class="sep">/</span>
       <a href="dashboard.html">Moje stavby</a>
       <span class="sep">/</span>
-      <strong>Bytový dům Prosecká</strong>
+      <strong id="breadcrumb-stavba">Bytový dům Prosecká</strong>
     </div>
   </div>
   <div class="topbar-right">
-    <div class="avatar-top">JN</div>
-    <span style="font-size:.8rem; color:rgba(255,255,255,0.7)">Jan Novák</span>
+    <div class="avatar-top" id="topbar-avatar">JN</div>
+    <span id="topbar-name" style="font-size:.8rem; color:rgba(255,255,255,0.7)">Jan Novák</span>
   </div>
 </div>
 
@@ -256,9 +256,9 @@
     <div class="day-sidebar-header">
       <div class="day-sidebar-title">Záznamy deníku</div>
       <div class="month-nav">
-        <button>‹</button>
-        <span class="month-label">Duben 2025</span>
-        <button>›</button>
+        <button onclick="prevMonth()">‹</button>
+        <span class="month-label" id="month-label">Duben 2025</span>
+        <button onclick="nextMonth()">›</button>
       </div>
       <button class="btn-new-day" onclick="newDay()">+ Přidat dnešní zápis</button>
     </div>
@@ -268,16 +268,16 @@
   <!-- Hlavní obsah -->
   <main class="main">
     <div class="stavba-info">
-      <span class="stavba-info-name">Bytový dům Prosecká</span>
-      <span class="status-badge green">Probíhá</span>
-      <span class="stavba-info-item">Prosecká 14, Praha 9</span>
-      <span class="stavba-info-item">3. 2. 2025 – 30. 11. 2025</span>
-      <span class="stavba-info-item">Stavbyvedoucí: Jan Novák</span>
+      <span class="stavba-info-name" id="info-name">Bytový dům Prosecká</span>
+      <span class="status-badge green" id="info-status">Probíhá</span>
+      <span class="stavba-info-item" id="info-addr">Prosecká 14, Praha 9</span>
+      <span class="stavba-info-item" id="info-dates">3. 2. 2025 – 30. 11. 2025</span>
+      <span class="stavba-info-item" id="info-vedouci">Stavbyvedoucí: Jan Novák</span>
     </div>
     <div class="stavba-detail-bar">
-      <span class="stavba-detail-item"><strong>St. povolení:</strong> SÚ-12345/2024</span>
-      <span class="stavba-detail-item"><strong>Parcela:</strong> 1234/5, k.ú. Prosek</span>
-      <span class="stavba-detail-item"><strong>Investor:</strong> Prosecká s.r.o.</span>
+      <span class="stavba-detail-item" id="detail-permit"><strong>St. povolení:</strong> SÚ-12345/2024</span>
+      <span class="stavba-detail-item" id="detail-parcel"><strong>Parcela:</strong> 1234/5, k.ú. Prosek</span>
+      <span class="stavba-detail-item" id="detail-investor"><strong>Investor:</strong> Prosecká s.r.o.</span>
       <span class="stavba-detail-item"><strong>Projektant:</strong> Ing. Pavel Horák</span>
       <span class="stavba-detail-item"><strong>TDI:</strong> Ing. Jana Vlčková</span>
       <span class="stavba-detail-item"><strong>Koor. BOZP:</strong> Ing. Petr Číž</span>
@@ -285,7 +285,7 @@
 
     <div class="day-content">
       <div class="day-title">
-        <div class="day-date-big">Středa 23. dubna 2025 <span class="day-num">Den č. 78</span></div>
+        <div class="day-date-big" id="day-date-big">Středa 23. dubna 2025 <span class="day-num">Den č. 78</span></div>
         <button class="btn-primary" onclick="saveDay()">Uložit zápis</button>
       </div>
 
@@ -297,7 +297,7 @@
         </div>
         <div class="weather-chips">
           <button class="weather-chip" onclick="selectWeather(this)">☀️ Slunečno</button>
-          <button class="weather-chip selected" onclick="selectWeather(this)">⛅ Polojasno</button>
+          <button class="weather-chip" onclick="selectWeather(this)">⛅ Polojasno</button>
           <button class="weather-chip" onclick="selectWeather(this)">☁️ Zataženo</button>
           <button class="weather-chip" onclick="selectWeather(this)">🌦 Přeháňky</button>
           <button class="weather-chip" onclick="selectWeather(this)">🌧 Déšť</button>
@@ -310,19 +310,19 @@
         <div class="weather-extra">
           <div class="field-inline">
             <label>Teplota ráno (°C)</label>
-            <input type="number" placeholder="např. 12" value="14" />
+            <input id="weather-temp-rano" type="number" placeholder="např. 12" />
           </div>
           <div class="field-inline">
             <label>Teplota odpoledne (°C)</label>
-            <input type="number" placeholder="např. 18" value="19" />
+            <input id="weather-temp-odp" type="number" placeholder="např. 18" />
           </div>
           <div class="field-inline">
             <label>Srážky (mm)</label>
-            <input type="number" placeholder="0" value="0" min="0" />
+            <input id="weather-srazky" type="number" placeholder="0" min="0" />
           </div>
         </div>
         <div class="weather-note">
-          <textarea rows="2" placeholder="Vliv počasí na práci (nepovinné)…">Ráno polojasno, odpoledne mraky. Práce nebyla ovlivněna.</textarea>
+          <textarea id="weather-poznamka" rows="2" placeholder="Vliv počasí na práci (nepovinné)…"></textarea>
         </div>
       </div>
 
@@ -339,29 +339,7 @@
           <div>Kvalifikace</div>
           <div></div>
         </div>
-        <div class="workers-list" id="workers-list">
-          <div class="worker-row">
-            <select class="count-select"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>12</option><option>15</option><option>20</option></select>
-            <select class="prof-select"><option>Zedník</option><option>Betonář</option><option>Tesař</option><option>Železář</option><option>Instalatér</option><option>Elektrikář</option><option>Malíř / natěrač</option><option>Obkladač</option><option>Podlahář</option><option>Klempíř</option><option>Lešenář</option><option>Řidič / strojník</option><option>Stavbyvedoucí</option><option>Mistr</option><option>Geodet</option><option>Revizní technik</option><option>Jiné</option></select>
-            <input class="firm-input" value="Novák s.r.o." placeholder="Firma..." />
-            <input class="qual-input" value="Výuční list" placeholder="Osvědčení..." />
-            <button class="remove-btn" onclick="removeRow(this)">✕</button>
-          </div>
-          <div class="worker-row">
-            <select class="count-select"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select>
-            <select class="prof-select"><option>Zedník</option><option>Betonář</option><option selected>Tesař</option><option>Železář</option><option>Instalatér</option><option>Elektrikář</option><option>Malíř / natěrač</option><option>Obkladač</option><option>Podlahář</option><option>Klempíř</option><option>Lešenář</option><option>Řidič / strojník</option><option>Stavbyvedoucí</option><option>Mistr</option><option>Geodet</option><option>Revizní technik</option><option>Jiné</option></select>
-            <input class="firm-input" value="Dřevomont s.r.o." placeholder="Firma..." />
-            <input class="qual-input" value="Výuční list" placeholder="Osvědčení..." />
-            <button class="remove-btn" onclick="removeRow(this)">✕</button>
-          </div>
-          <div class="worker-row">
-            <select class="count-select"><option>1</option><option selected>2</option><option>3</option></select>
-            <select class="prof-select"><option>Zedník</option><option>Betonář</option><option>Tesař</option><option>Železář</option><option selected>Instalatér</option><option>Elektrikář</option><option>Malíř / natěrač</option><option>Obkladač</option><option>Podlahář</option><option>Klempíř</option><option>Lešenář</option><option>Řidič / strojník</option><option>Stavbyvedoucí</option><option>Mistr</option><option>Geodet</option><option>Revizní technik</option><option>Jiné</option></select>
-            <input class="firm-input" value="VodoTech s.r.o." placeholder="Firma..." />
-            <input class="qual-input" value="Osvědčení ZTI" placeholder="Osvědčení..." />
-            <button class="remove-btn" onclick="removeRow(this)">✕</button>
-          </div>
-        </div>
+        <div class="workers-list" id="workers-list"></div>
         <button class="add-worker-btn" onclick="addWorker()">+ Přidat skupinu pracovníků</button>
         <div class="workers-total" id="workers-total">Celkem na stavbě: <strong>9 pracovníků</strong></div>
       </div>
@@ -391,92 +369,7 @@
             <button class="tpl-btn" onclick="addFromTemplate('zemni')">Zemní práce</button>
           </div>
         </div>
-        <div class="prace-list" id="prace-list">
-          <div class="prace-item">
-            <div class="prace-item-header">
-              <span class="prace-num">Práce č. 1</span>
-              <button class="remove-btn" onclick="this.closest('.prace-item').remove()" style="font-size:0.78rem; color:var(--muted);">Odebrat</button>
-            </div>
-            <div class="kategorie-label">Kategorie prací</div>
-            <div class="kategorie-chips">
-              <button class="kat-chip" onclick="toggleKat(this)">Zemní práce</button>
-              <button class="kat-chip sel" onclick="toggleKat(this)">Betonáž</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Zdění</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Tesařské práce</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Železářské práce</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Instalace (ZTI)</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Elektro</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Omítky</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Obklady / dlažby</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Podlahy</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Střecha</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Lešení</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Fasáda</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Bourání</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Geodetické práce</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Jiné</button>
-            </div>
-            <div class="prace-grid">
-              <div class="prace-field full">
-                <label>Přesný popis činnosti *</label>
-                <textarea rows="2" placeholder="Popište co přesně bylo prováděno…">Betonáž stropní desky nad 2.NP — čerpadlo beton C25/30, tloušťka desky 200 mm.</textarea>
-              </div>
-              <div class="prace-field">
-                <label>Místo na stavbě</label>
-                <select><option>2. nadzemní podlaží</option><option>1. nadzemní podlaží</option><option>Přízemí</option><option>Suterén</option><option>3. nadzemní podlaží</option><option>Střecha</option><option>Fasáda</option><option>Vnější plochy</option><option>Základy</option><option>Jiné místo…</option></select>
-              </div>
-              <div class="prace-field">
-                <label>Rozsah prací</label>
-                <div class="rozsah-row">
-                  <input type="number" value="185" placeholder="Množství" />
-                  <select><option>m²</option><option>m³</option><option>bm</option><option>ks</option><option>hod</option><option>t</option><option>—</option></select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="prace-item">
-            <div class="prace-item-header">
-              <span class="prace-num">Práce č. 2</span>
-              <button class="remove-btn" onclick="this.closest('.prace-item').remove()" style="font-size:0.78rem; color:var(--muted);">Odebrat</button>
-            </div>
-            <div class="kategorie-label">Kategorie prací</div>
-            <div class="kategorie-chips">
-              <button class="kat-chip" onclick="toggleKat(this)">Zemní práce</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Betonáž</button>
-              <button class="kat-chip sel" onclick="toggleKat(this)">Zdění</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Tesařské práce</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Železářské práce</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Instalace (ZTI)</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Elektro</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Omítky</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Obklady / dlažby</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Podlahy</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Střecha</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Lešení</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Fasáda</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Bourání</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Geodetické práce</button>
-              <button class="kat-chip" onclick="toggleKat(this)">Jiné</button>
-            </div>
-            <div class="prace-grid">
-              <div class="prace-field full">
-                <label>Přesný popis činnosti *</label>
-                <textarea rows="2" placeholder="Popište co přesně bylo prováděno…">Zdění příček 3.NP — tvárnice Ytong 150 mm, malta Ytong.</textarea>
-              </div>
-              <div class="prace-field">
-                <label>Místo na stavbě</label>
-                <select><option>2. nadzemní podlaží</option><option>1. nadzemní podlaží</option><option selected>3. nadzemní podlaží</option><option>Přízemí</option><option>Suterén</option></select>
-              </div>
-              <div class="prace-field">
-                <label>Rozsah prací</label>
-                <div class="rozsah-row">
-                  <input type="number" value="48" placeholder="Množství" />
-                  <select><option>m²</option></select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="prace-list" id="prace-list"></div>
         <button class="add-prace-btn" onclick="addPrace()">+ Přidat další práce</button>
       </div>
 
@@ -494,18 +387,7 @@
           <div>Atesty / CE</div>
           <div></div>
         </div>
-        <div class="dodavky-list" id="dodavky-list">
-          <div class="dodavka-item">
-            <div class="dodavka-grid">
-              <div class="df"><input placeholder="Název materiálu…" value="Beton C25/30 XC2" /></div>
-              <div class="df"><input placeholder="Množství + j." value="185 m³" /></div>
-              <div class="df"><input placeholder="Dodavatel" value="TBG Metrostav" /></div>
-              <div class="df"><input placeholder="Č. DL" value="DL-2025-0523" /></div>
-              <div class="df"><input placeholder="Atesty / CE" value="ES prohlášení" /></div>
-              <div class="df" style="display:flex;align-items:flex-end;"><button class="remove-btn" onclick="this.closest('.dodavka-item').remove()">✕</button></div>
-            </div>
-          </div>
-        </div>
+        <div class="dodavky-list" id="dodavky-list"></div>
         <button class="add-dodavka-btn" onclick="addDodavka()">+ Přidat dodávku materiálu</button>
       </div>
 
@@ -522,38 +404,7 @@
           <div>Č. protokolu</div>
           <div></div>
         </div>
-        <div class="kontroly-list" id="kontroly-list">
-          <div class="kontrola-item">
-            <div class="kontrola-grid">
-              <div class="df">
-                <select>
-                  <option>Zkouška konzistence betonu (sednutí kužele)</option>
-                  <option>Odběr vzorků betonu (krychle)</option>
-                  <option>Kontrola výztuže před betonáží</option>
-                  <option>Geodetické zaměření</option>
-                  <option>Tlaková zkouška vodovodu</option>
-                  <option>Zkouška těsnosti kanalizace</option>
-                  <option>Revize elektroinstalace</option>
-                  <option>Kontrola svárů</option>
-                  <option>Kontrolní prohlídka stavby (SÚ)</option>
-                  <option>Vizuální kontrola základů</option>
-                  <option>Jiná kontrola / zkouška</option>
-                </select>
-              </div>
-              <div class="df"><input placeholder="Jméno / firma" value="Lab. TBG Metrostav" /></div>
-              <div class="df">
-                <select>
-                  <option selected>Vyhovující</option>
-                  <option>Nevyhovující – viz poznámka</option>
-                  <option>Podmíněně vyhovující</option>
-                  <option>Probíhá / čeká na výsledek</option>
-                </select>
-              </div>
-              <div class="df"><input placeholder="Č. protokolu" value="PROT-2025-042" /></div>
-              <div class="df" style="display:flex;align-items:flex-end;"><button class="remove-btn" onclick="this.closest('.kontrola-item').remove()">✕</button></div>
-            </div>
-          </div>
-        </div>
+        <div class="kontroly-list" id="kontroly-list"></div>
         <button class="add-kontrola-btn" onclick="addKontrola()">+ Přidat kontrolu / zkoušku</button>
       </div>
 
@@ -566,7 +417,7 @@
         <div style="margin-bottom:12px;">
           <div style="font-size:0.65rem; font-weight:600; color:var(--subtle); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px;">Podmínky BOZP</div>
           <div class="bozp-chips">
-            <button class="bozp-chip sel" onclick="toggleBozp(this)">Bez mimořádných událostí</button>
+            <button class="bozp-chip" onclick="toggleBozp(this)">Bez mimořádných událostí</button>
             <button class="bozp-chip" onclick="toggleBozp(this)">Pracovní úraz</button>
             <button class="bozp-chip" onclick="toggleBozp(this)">Téměř nehoda (near miss)</button>
             <button class="bozp-chip" onclick="toggleBozp(this)">Požár / požární poplach</button>
@@ -577,11 +428,11 @@
         <div class="bozp-grid">
           <div class="bozp-field">
             <label>OOPP — použité osobní ochranné prostředky</label>
-            <select multiple style="height:90px;">
-              <option selected>Přilba (helma)</option>
-              <option selected>Reflexní vesta</option>
-              <option selected>Pracovní obuv</option>
-              <option selected>Rukavice</option>
+            <select id="bozp-oopp" multiple style="height:90px;">
+              <option>Přilba (helma)</option>
+              <option>Reflexní vesta</option>
+              <option>Pracovní obuv</option>
+              <option>Rukavice</option>
               <option>Ochranné brýle</option>
               <option>Ochrana sluchu</option>
               <option>Respirátor / maska</option>
@@ -590,13 +441,13 @@
           </div>
           <div class="bozp-field">
             <label>Počet pracovníků — proškolení BOZP</label>
-            <input type="number" value="9" min="0" style="margin-bottom:8px;" />
+            <input id="bozp-proškoleni" type="number" min="0" style="margin-bottom:8px;" />
             <label>Koordinátor BOZP na stavbě</label>
-            <input type="text" value="Ing. Petr Číž" placeholder="Jméno koordinátora..." />
+            <input id="bozp-koor" type="text" placeholder="Jméno koordinátora..." />
           </div>
           <div class="bozp-field full">
             <label>Popis mimořádné události / záznamu BOZP (vyplňte jen při události)</label>
-            <textarea rows="2" placeholder="Popište event. mimořádnou událost, přijatá opatření, nahlášení…"></textarea>
+            <textarea id="bozp-popis" rows="2" placeholder="Popište event. mimořádnou událost, přijatá opatření, nahlášení…"></textarea>
           </div>
         </div>
       </div>
@@ -621,15 +472,15 @@
         <div class="bozp-grid">
           <div class="bozp-field">
             <label>Datum kontrolní prohlídky</label>
-            <input type="date" value="" />
+            <input id="prohlıdka-datum" type="date" />
           </div>
           <div class="bozp-field">
             <label>Prováděl (úřad / orgán)</label>
-            <input type="text" placeholder="např. Stavební úřad Praha 9" />
+            <input id="prohlıdka-provadel" type="text" placeholder="např. Stavební úřad Praha 9" />
           </div>
           <div class="bozp-field full">
             <label>Výsledek a uložené opatření</label>
-            <textarea rows="2" placeholder="Popište výsledek kontrolní prohlídky a případná uložená opatření nebo výzvy…"></textarea>
+            <textarea id="prohlıdka-vysledek" rows="2" placeholder="Popište výsledek kontrolní prohlídky a případná uložená opatření nebo výzvy…"></textarea>
           </div>
         </div>
         <div style="font-size:0.7rem; color:var(--subtle); margin-top:4px;">Vyplňte pouze ve dnech, kdy proběhla kontrolní prohlídka stavebního úřadu nebo jiného dozorového orgánu.</div>
@@ -643,9 +494,9 @@
         </div>
         <div class="odchylky-field">
           <label>Popis odchylky od schválené PD (vyplňte, pokud nastala)</label>
-          <textarea rows="3" placeholder="Popište veškeré odchylky od projektové dokumentace, změny materiálů, rozměrů, postupů a jejich důvod. Odchylky musí být schváleny projektantem (AD)."></textarea>
+          <textarea id="odchylky-popis" rows="3" placeholder="Popište veškeré odchylky od projektové dokumentace, změny materiálů, rozměrů, postupů a jejich důvod. Odchylky musí být schváleny projektantem (AD)."></textarea>
           <label>Schválil (projektant / AD)</label>
-          <textarea rows="1" placeholder="Jméno projektanta / AD a způsob schválení…"></textarea>
+          <textarea id="odchylky-schvalil" rows="1" placeholder="Jméno projektanta / AD a způsob schválení…"></textarea>
         </div>
       </div>
 
@@ -672,7 +523,7 @@
           <div class="podpis-item">
             <label>Stavbyvedoucí</label>
             <div class="podpis-line"></div>
-            <div class="podpis-name">Jan Novák</div>
+            <div class="podpis-name" id="podpis-stavbyvedicouci">Jan Novák</div>
           </div>
           <div class="podpis-item">
             <label>Technický dozor investora (TDI)</label>
@@ -688,7 +539,7 @@
       </div>
 
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:4px; margin-bottom:24px;">
-        <button class="btn-secondary">Zahodit změny</button>
+        <button class="btn-secondary" onclick="discardDay()">Zahodit změny</button>
         <button class="btn-primary" onclick="saveDay()">Uložit zápis</button>
       </div>
     </div>
@@ -716,33 +567,422 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // Sidebar – dny
-  const days = [
-    { d:'23. 4.', label:'Středa',  w:'⛅', note:'9 pracovníků', done:true, active:true },
-    { d:'22. 4.', label:'Úterý',   w:'☀️', note:'11 pracovníků', done:true },
-    { d:'17. 4.', label:'Čtvrtek', w:'🌧', note:'5 pracovníků, déšť', done:true },
-    { d:'16. 4.', label:'Středa',  w:'☀️', note:'10 pracovníků', done:true },
-    { d:'15. 4.', label:'Úterý',   w:'⛅', note:'9 pracovníků', done:true },
-    { d:'14. 4.', label:'Pondělí', w:'☁️', note:'8 pracovníků', done:true },
-    { d:'11. 4.', label:'Pátek',   w:'☀️', note:'12 pracovníků', done:true },
-    { d:'10. 4.', label:'Čtvrtek', w:'⛅', note:'10 pracovníků', done:true },
-  ];
-  const list = document.getElementById('day-list');
-  days.forEach(d => {
-    list.innerHTML += `
-      <div class="day-item ${d.active?'active':''}" onclick="selectDay(this)">
-        <div class="day-item-date">
-          <span>${d.label} ${d.d}</span>
-          <span class="weather-icon">${d.w}</span>
-        </div>
-        <div class="day-item-meta">${d.note}</div>
-      </div>`;
-  });
+  // ══════════════════════════════════════════════════════════
+  //  STAVEBNÍ DENÍK — denik.html  (localStorage edition)
+  // ══════════════════════════════════════════════════════════
 
-  function selectDay(el) {
+  // ── Helpers ──────────────────────────────────────────────
+  function escHtml(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function initials(name) {
+    return name.replace(/Ing\.\s*/,'').replace(/Mgr\.\s*/,'').split(' ').map(w=>w[0]).filter(Boolean).slice(0,2).join('').toUpperCase();
+  }
+
+  // ── State ────────────────────────────────────────────────
+  const user      = JSON.parse(localStorage.getItem('sd_user') || '{}');
+  const params    = new URLSearchParams(window.location.search);
+  const stavbaId  = params.get('id');
+  const ENTRIES_KEY = stavbaId ? ('sd_entries_' + stavbaId) : null;
+
+  function getEntries() { return ENTRIES_KEY ? JSON.parse(localStorage.getItem(ENTRIES_KEY)||'[]') : []; }
+  function putEntries(arr) { if (ENTRIES_KEY) localStorage.setItem(ENTRIES_KEY, JSON.stringify(arr)); }
+
+  let currentDate  = null;
+  let currentMonth = new Date().getMonth();
+  let currentYear  = new Date().getFullYear();
+
+  const MONTHS_CS = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
+  const DAYS_CS   = ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'];
+
+  // ── Init UI ──────────────────────────────────────────────
+  function initUI() {
+    const uName = user.name || 'Uživatel';
+    document.getElementById('topbar-avatar').textContent = initials(uName);
+    document.getElementById('topbar-name').textContent   = uName;
+
+    const stavby = JSON.parse(localStorage.getItem('sd_stavby')||'[]');
+    const stavba = stavby.find(s => s.id === stavbaId);
+    if (stavba) {
+      document.getElementById('breadcrumb-stavba').textContent = stavba.name||'';
+      document.title = 'Stavební deník – ' + (stavba.name||'');
+      document.getElementById('info-name').textContent = stavba.name||'';
+      const statusMap = {
+        probiha:    ['Probíhá','green'],
+        priprava:   ['Příprava','yellow'],
+        dokoncena:  ['Dokončena','gray'],
+        pozastavena:['Pozastavena','red']
+      };
+      const [lbl, cls] = statusMap[stavba.status] || ['Probíhá','green'];
+      const sb = document.getElementById('info-status');
+      sb.textContent = lbl; sb.className = 'status-badge ' + cls;
+      document.getElementById('info-addr').textContent   = stavba.addr||'';
+      document.getElementById('info-dates').textContent  = [stavba.start,stavba.end].filter(Boolean).join(' – ');
+      document.getElementById('info-vedouci').textContent = 'Stavbyvedoucí: ' + (stavba.mgr||'');
+      document.getElementById('detail-permit').innerHTML  = '<strong>St. povolení:</strong> ' + escHtml(stavba.permit||'—');
+      document.getElementById('detail-parcel').innerHTML  = '<strong>Parcela:</strong> '      + escHtml(stavba.parcel||'—');
+      document.getElementById('detail-investor').innerHTML = '<strong>Investor:</strong> '    + escHtml(stavba.investor||'—');
+      document.getElementById('podpis-stavbyvedicouci').textContent = stavba.mgr||'';
+    }
+  }
+
+  // ── Month navigation ─────────────────────────────────────
+  function updateMonthLabel() {
+    document.getElementById('month-label').textContent = MONTHS_CS[currentMonth] + ' ' + currentYear;
+  }
+  function prevMonth() {
+    currentMonth--; if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    updateMonthLabel(); renderDayList();
+  }
+  function nextMonth() {
+    currentMonth++; if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    updateMonthLabel(); renderDayList();
+  }
+
+  // ── Day list ─────────────────────────────────────────────
+  function renderDayList() {
+    const entries = getEntries();
+    const list    = document.getElementById('day-list');
+    const month   = entries
+      .filter(e => { const d = new Date(e.date+'T00:00:00'); return d.getMonth()===currentMonth && d.getFullYear()===currentYear; })
+      .sort((a,b) => b.date.localeCompare(a.date));
+    if (!month.length) {
+      list.innerHTML = '<div style="padding:16px 14px;font-size:0.75rem;color:rgba(255,255,255,0.4);text-align:center;">Žádné záznamy za tento měsíc</div>';
+      return;
+    }
+    list.innerHTML = month.map(e => {
+      const d      = new Date(e.date+'T00:00:00');
+      const dn     = DAYS_CS[d.getDay()];
+      const ds     = d.getDate() + '. ' + (d.getMonth()+1) + '.';
+      const total  = (e.workers||[]).reduce((s,w)=>s+(parseInt(w.count)||0),0);
+      const wChip  = (e.weather&&e.weather.chip) ? e.weather.chip : '';
+      const wIcon  = wChip ? wChip.split(' ')[0] : '📅';
+      const active = e.date === currentDate ? ' active' : '';
+      return '<div class="day-item'+active+'" onclick="selectDay(this,\''+e.date+'\')">'
+        + '<div class="day-item-date"><span>'+dn+' '+ds+'</span><span class="weather-icon">'+wIcon+'</span></div>'
+        + '<div class="day-item-meta">'+total+' pracovníků</div></div>';
+    }).join('');
+  }
+
+  // ── Select day ───────────────────────────────────────────
+  function selectDay(el, date) {
     document.querySelectorAll('.day-item').forEach(i => i.classList.remove('active'));
     el.classList.add('active');
+    currentDate = date;
+    loadEntry(date);
   }
+
+  // ── Clear form ───────────────────────────────────────────
+  function clearForm() {
+    document.querySelectorAll('.weather-chip').forEach(c => c.classList.remove('selected'));
+    document.getElementById('weather-temp-rano').value = '';
+    document.getElementById('weather-temp-odp').value  = '';
+    document.getElementById('weather-srazky').value    = '';
+    document.getElementById('weather-poznamka').value  = '';
+    document.getElementById('workers-list').innerHTML  = '';
+    updateTotal();
+    Object.keys(addedMachines).forEach(id => {
+      var card = document.getElementById('mech-card-'+id);
+      if (card) card.remove();
+      delete addedMachines[id];
+    });
+    document.getElementById('mech-selected').innerHTML  = '';
+    document.getElementById('prace-list').innerHTML     = '';
+    praceCount = 0;
+    document.getElementById('dodavky-list').innerHTML   = '';
+    document.getElementById('kontroly-list').innerHTML  = '';
+    document.querySelectorAll('.bozp-chip').forEach(c => c.classList.remove('sel'));
+    var oopp = document.getElementById('bozp-oopp');
+    if (oopp) Array.from(oopp.options).forEach(o => o.selected = false);
+    var bp = document.getElementById('bozp-proškoleni'); if (bp) bp.value = '';
+    var bk = document.getElementById('bozp-koor');       if (bk) bk.value = '';
+    var bd = document.getElementById('bozp-popis');      if (bd) bd.value = '';
+    document.getElementById('tdi-list').innerHTML          = '';
+    document.getElementById('prohlıdka-datum').value       = '';
+    document.getElementById('prohlıdka-provadel').value    = '';
+    document.getElementById('prohlıdka-vysledek').value    = '';
+    document.getElementById('odchylky-popis').value        = '';
+    document.getElementById('odchylky-schvalil').value     = '';
+  }
+
+  // ── Load entry into form ─────────────────────────────────
+  function loadEntry(date) {
+    clearForm();
+    var entries = getEntries();
+    var entry   = entries.find(e => e.date === date);
+    // Day header
+    var d       = new Date(date+'T00:00:00');
+    var dayStr  = d.getDate() + '. ' + MONTHS_CS[d.getMonth()].toLowerCase() + ' ' + d.getFullYear();
+    var dayNum  = calcDayNumber(date, entries);
+    document.getElementById('day-date-big').innerHTML = DAYS_CS[d.getDay()] + ' ' + dayStr + ' <span class="day-num">Den č. ' + dayNum + '</span>';
+    if (!entry) return;
+    // Weather
+    if (entry.weather) {
+      document.querySelectorAll('.weather-chip').forEach(c => { if (c.textContent.trim()===entry.weather.chip) c.classList.add('selected'); });
+      document.getElementById('weather-temp-rano').value = entry.weather.tempRano != null ? entry.weather.tempRano : '';
+      document.getElementById('weather-temp-odp').value  = entry.weather.tempOdp  != null ? entry.weather.tempOdp  : '';
+      document.getElementById('weather-srazky').value    = entry.weather.srazky   != null ? entry.weather.srazky   : '';
+      document.getElementById('weather-poznamka').value  = entry.weather.poznamka || '';
+    }
+    // Workers
+    (entry.workers||[]).forEach(w => addWorkerRow(w));
+    updateTotal();
+    // Machinery
+    (entry.machinery||[]).forEach(function(id) {
+      var m = companyMachines.find(x => x.id === id);
+      if (!m) return;
+      addedMachines[id] = true;
+      var container = document.getElementById('mech-selected');
+      var card = document.createElement('div');
+      card.className = 'mech-card'; card.id = 'mech-card-'+id;
+      card.innerHTML = '<div class="mech-card-icon">'+m.icon+'</div>'
+        +'<div class="mech-card-info"><div class="mech-card-name">'+m.name+'</div><div class="mech-card-spz">'+m.spz+'</div></div>'
+        +'<button class="mech-card-remove" onclick="removeMech('+id+')">✕</button>';
+      container.appendChild(card);
+    });
+    // Prace
+    (entry.prace||[]).forEach(p => addPraceFromData(p));
+    // Dodavky
+    (entry.dodavky||[]).forEach(d => addDodavkaFromData(d));
+    // Kontroly
+    (entry.kontroly||[]).forEach(k => addKontrolaFromData(k));
+    // BOZP
+    if (entry.bozp) {
+      (entry.bozp.chips||[]).forEach(chip => { document.querySelectorAll('.bozp-chip').forEach(c => { if (c.textContent.trim()===chip) c.classList.add('sel'); }); });
+      var oopp = document.getElementById('bozp-oopp');
+      if (oopp && entry.bozp.oopp) Array.from(oopp.options).forEach(o => { o.selected = entry.bozp.oopp.includes(o.value); });
+      var bp = document.getElementById('bozp-proškoleni'); if (bp) bp.value = entry.bozp.proškoleni != null ? entry.bozp.proškoleni : '';
+      var bk = document.getElementById('bozp-koor');       if (bk) bk.value = entry.bozp.koor  || '';
+      var bd = document.getElementById('bozp-popis');      if (bd) bd.value = entry.bozp.popis || '';
+    }
+    // TDI
+    (entry.tdi||[]).forEach(t => addTDIFromData(t));
+    // Prohlídka
+    if (entry.prohlıdka) {
+      document.getElementById('prohlıdka-datum').value    = entry.prohlıdka.datum    || '';
+      document.getElementById('prohlıdka-provadel').value = entry.prohlıdka.provadel || '';
+      document.getElementById('prohlıdka-vysledek').value = entry.prohlıdka.vysledek || '';
+    }
+    // Odchylky
+    if (entry.odchylky) {
+      document.getElementById('odchylky-popis').value    = entry.odchylky.popis    || '';
+      document.getElementById('odchylky-schvalil').value = entry.odchylky.schvalil || '';
+    }
+  }
+
+  function calcDayNumber(date, entries) {
+    var sorted = entries.map(e => e.date).sort();
+    var idx    = sorted.indexOf(date);
+    return idx >= 0 ? idx + 1 : entries.length + 1;
+  }
+
+  // ── New day ───────────────────────────────────────────────
+  function newDay() {
+    var today    = new Date();
+    var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+    var entries  = getEntries();
+    var exists   = entries.find(e => e.date === todayStr);
+    currentMonth = today.getMonth();
+    currentYear  = today.getFullYear();
+    currentDate  = todayStr;
+    updateMonthLabel();
+    if (exists) {
+      renderDayList();
+      loadEntry(todayStr);
+      showToast('Zápis pro dnešní den již existuje a byl načten.');
+      return;
+    }
+    clearForm();
+    addWorker();
+    var d = new Date(todayStr+'T00:00:00');
+    document.getElementById('day-date-big').innerHTML = DAYS_CS[d.getDay()] + ' ' + d.getDate() + '. ' + MONTHS_CS[d.getMonth()].toLowerCase() + ' ' + d.getFullYear() + ' <span class="day-num">Nový zápis</span>';
+    renderDayList();
+    showToast('Nový zápis připraven – vyplňte formulář a uložte.');
+  }
+
+  // ── Save day ─────────────────────────────────────────────
+  function saveDay() {
+    if (!currentDate) { showToast('Nejprve vyberte nebo vytvořte zápis.'); return; }
+    var entry = {
+      date:      currentDate,
+      savedAt:   new Date().toISOString(),
+      savedBy:   user.name || '',
+      weather:   collectWeather(),
+      workers:   collectWorkers(),
+      machinery: Object.keys(addedMachines).map(Number),
+      prace:     collectPrace(),
+      dodavky:   collectDodavky(),
+      kontroly:  collectKontroly(),
+      bozp:      collectBozp(),
+      tdi:       collectTdi(),
+      prohlıdka: collectProhlidka(),
+      odchylky:  collectOdchylky(),
+    };
+    var entries = getEntries();
+    var idx     = entries.findIndex(e => e.date === currentDate);
+    if (idx >= 0) entries[idx] = entry; else entries.push(entry);
+    putEntries(entries);
+    renderDayList();
+    showToast('Zápis byl uložen ✓');
+  }
+
+  // ── Discard ───────────────────────────────────────────────
+  function discardDay() {
+    if (!currentDate) return;
+    if (!confirm('Zahodit neuložené změny?')) return;
+    loadEntry(currentDate);
+    showToast('Změny zahozeny.');
+  }
+
+  // ── Collect helpers ──────────────────────────────────────
+  function collectWeather() {
+    var chip = document.querySelector('.weather-chip.selected');
+    return { chip: chip ? chip.textContent.trim() : '',
+      tempRano: parseFloat(document.getElementById('weather-temp-rano').value) || null,
+      tempOdp:  parseFloat(document.getElementById('weather-temp-odp').value)  || null,
+      srazky:   parseFloat(document.getElementById('weather-srazky').value)    || 0,
+      poznamka: document.getElementById('weather-poznamka').value.trim() };
+  }
+  function collectWorkers() {
+    return Array.from(document.querySelectorAll('.worker-row')).map(row => ({
+      count: parseInt(row.querySelector('.count-select').value)||0,
+      prof:  row.querySelector('.prof-select').value,
+      firma: row.querySelector('.firm-input').value.trim(),
+      qual:  row.querySelector('.qual-input').value.trim() }));
+  }
+  function collectPrace() {
+    return Array.from(document.querySelectorAll('.prace-item')).map(item => ({
+      kategorie:  Array.from(item.querySelectorAll('.kat-chip.sel')).map(c=>c.textContent.trim()),
+      popis:      (item.querySelector('textarea')||{}).value ? item.querySelector('textarea').value.trim() : '',
+      misto:      (item.querySelector('.prace-field select')||{}).value||'',
+      rozsahQty:  parseFloat((item.querySelector('.rozsah-row input')||{}).value)||null,
+      rozsahUnit: (item.querySelector('.rozsah-row select')||{}).value||'m²' }));
+  }
+  function collectDodavky() {
+    return Array.from(document.querySelectorAll('.dodavka-item')).map(item => {
+      var inp = item.querySelectorAll('input');
+      return { material:inp[0]&&inp[0].value.trim()||'', mnozstvi:inp[1]&&inp[1].value.trim()||'',
+        dodavatel:inp[2]&&inp[2].value.trim()||'', dl:inp[3]&&inp[3].value.trim()||'', atesty:inp[4]&&inp[4].value.trim()||'' }; });
+  }
+  function collectKontroly() {
+    return Array.from(document.querySelectorAll('.kontrola-item')).map(item => {
+      var sel=item.querySelectorAll('select'), inp=item.querySelectorAll('input');
+      return { druh:sel[0]&&sel[0].value||'', provedl:inp[0]&&inp[0].value.trim()||'',
+        vysledek:sel[1]&&sel[1].value||'', protokol:inp[1]&&inp[1].value.trim()||'' }; });
+  }
+  function collectBozp() {
+    var oopp=document.getElementById('bozp-oopp');
+    return { chips:Array.from(document.querySelectorAll('.bozp-chip.sel')).map(c=>c.textContent.trim()),
+      oopp: oopp ? Array.from(oopp.selectedOptions).map(o=>o.value) : [],
+      proškoleni: parseInt(document.getElementById('bozp-proškoleni').value)||0,
+      koor: document.getElementById('bozp-koor').value.trim(),
+      popis: document.getElementById('bozp-popis').value.trim() };
+  }
+  function collectTdi() {
+    return Array.from(document.querySelectorAll('.tdi-item')).map(item => {
+      var sel=item.querySelectorAll('select'), inp=item.querySelectorAll('input'), ta=item.querySelectorAll('textarea');
+      return { typ:sel[0]&&sel[0].value||'', jmeno:inp[0]&&inp[0].value.trim()||'',
+        firma:inp[1]&&inp[1].value.trim()||'', zaznam:ta[0]&&ta[0].value.trim()||'',
+        termin:inp[2]&&inp[2].value||'', stav:sel[1]&&sel[1].value||'' }; });
+  }
+  function collectProhlidka() {
+    return { datum:document.getElementById('prohlıdka-datum').value||'',
+      provadel:document.getElementById('prohlıdka-provadel').value.trim(),
+      vysledek:document.getElementById('prohlıdka-vysledek').value.trim() };
+  }
+  function collectOdchylky() {
+    return { popis:document.getElementById('odchylky-popis').value.trim(),
+      schvalil:document.getElementById('odchylky-schvalil').value.trim() };
+  }
+
+  // ── Row builders ─────────────────────────────────────────
+  var PROF_OPTIONS = ['Zedník','Betonář','Tesař','Železář','Instalatér','Elektrikář','Malíř / natěrač','Obkladač','Podlahář','Klempíř','Lešenář','Řidič / strojník','Stavbyvedoucí','Mistr','Geodet','Revizní technik','Jiné'];
+  var COUNT_OPTIONS = [1,2,3,4,5,6,7,8,9,10,12,15,20];
+  var LOC_OPTIONS   = ['Přízemí','1. nadzemní podlaží','2. nadzemní podlaží','3. nadzemní podlaží','Suterén','Střecha','Fasáda','Vnější plochy','Základy','Jiné místo…'];
+  var UNIT_OPTIONS  = ['m²','m³','bm','ks','hod','t','—'];
+  var DRUH_OPTIONS  = ['Zkouška konzistence betonu (sednutí kužele)','Odběr vzorků betonu (krychle)','Kontrola výztuže před betonáží','Geodetické zaměření','Tlaková zkouška vodovodu','Zkouška těsnosti kanalizace','Revize elektroinstalace','Kontrola svárů','Kontrolní prohlídka stavby (SÚ)','Vizuální kontrola základů','Jiná kontrola / zkouška'];
+  var VYSL_OPTIONS  = ['Vyhovující','Nevyhovující – viz poznámka','Podmíněně vyhovující','Probíhá / čeká na výsledek'];
+  var TYP_OPTIONS   = ['TDI – Technický dozor investora','AD – Autorský dozor projektanta','Kontrola stavebního úřadu','Jiný dozor / záznam'];
+  var STAV_OPTIONS  = ['Otevřeno – splnit do termínu','Splněno','V řešení'];
+
+  function sel(opts, val) { return opts.map(o=>'<option'+(o===val?' selected':'')+'>'+escHtml(o)+'</option>').join(''); }
+
+  function addWorkerRow(w) {
+    var wl  = document.getElementById('workers-list');
+    var div = document.createElement('div');
+    div.className = 'worker-row';
+    div.innerHTML = '<select class="count-select">'+COUNT_OPTIONS.map(n=>'<option'+(n==(w&&w.count)?'  selected':'')+'>'+n+'</option>').join('')+'</select>'
+      +'<select class="prof-select">'+sel(PROF_OPTIONS, w&&w.prof)+'</select>'
+      +'<input class="firm-input" value="'+escHtml(w&&w.firma||'')+'" placeholder="Firma / subdodavatel…" />'
+      +'<input class="qual-input" value="'+escHtml(w&&w.qual||'')+'"  placeholder="Osvědčení / licence…" />'
+      +'<button class="remove-btn" onclick="removeRow(this)">✕</button>';
+    wl.appendChild(div);
+    updateTotal();
+  }
+
+  function addPraceFromData(p) {
+    praceCount++;
+    var item = document.createElement('div');
+    item.className = 'prace-item';
+    var kats = (p&&p.kategorie)||[];
+    item.innerHTML = '<div class="prace-item-header"><span class="prace-num">Práce č. '+praceCount+'</span>'
+      +'<button class="remove-btn" onclick="this.closest(\'.prace-item\').remove()" style="font-size:0.78rem;color:var(--muted);">Odebrat</button></div>'
+      +'<div class="kategorie-label">Kategorie prací</div>'
+      +'<div class="kategorie-chips">'+katList.map(k=>'<button class="kat-chip'+(kats.includes(k)?' sel':'')+'" onclick="toggleKat(this)">'+k+'</button>').join('')+'</div>'
+      +'<div class="prace-grid">'
+        +'<div class="prace-field full"><label>Přesný popis činnosti *</label><textarea rows="2" placeholder="Popište co přesně bylo prováděno…">'+escHtml(p&&p.popis||'')+'</textarea></div>'
+        +'<div class="prace-field"><label>Místo na stavbě</label><select>'+sel(LOC_OPTIONS, p&&p.misto)+'</select></div>'
+        +'<div class="prace-field"><label>Rozsah prací</label><div class="rozsah-row">'
+          +'<input type="number" value="'+(p&&p.rozsahQty!=null?p.rozsahQty:'')+'" placeholder="Množství" />'
+          +'<select>'+sel(UNIT_OPTIONS, p&&p.rozsahUnit)+'</select>'
+        +'</div></div>'
+      +'</div>';
+    document.getElementById('prace-list').appendChild(item);
+  }
+
+  function addDodavkaFromData(d) {
+    var item = document.createElement('div');
+    item.className = 'dodavka-item';
+    item.innerHTML = '<div class="dodavka-grid">'
+      +'<div class="df"><input placeholder="Název materiálu…" value="'+escHtml(d&&d.material||'')+'"/></div>'
+      +'<div class="df"><input placeholder="Množství + j." value="'+escHtml(d&&d.mnozstvi||'')+'"/></div>'
+      +'<div class="df"><input placeholder="Dodavatel" value="'+escHtml(d&&d.dodavatel||'')+'"/></div>'
+      +'<div class="df"><input placeholder="Č. DL" value="'+escHtml(d&&d.dl||'')+'"/></div>'
+      +'<div class="df"><input placeholder="Atesty / CE" value="'+escHtml(d&&d.atesty||'')+'"/></div>'
+      +'<div class="df" style="display:flex;align-items:flex-end;"><button class="remove-btn" onclick="this.closest(\'.dodavka-item\').remove()">✕</button></div>'
+      +'</div>';
+    document.getElementById('dodavky-list').appendChild(item);
+  }
+
+  function addKontrolaFromData(k) {
+    var item = document.createElement('div');
+    item.className = 'kontrola-item';
+    item.innerHTML = '<div class="kontrola-grid">'
+      +'<div class="df"><select>'+sel(DRUH_OPTIONS,k&&k.druh)+'</select></div>'
+      +'<div class="df"><input placeholder="Jméno / firma" value="'+escHtml(k&&k.provedl||'')+'"/></div>'
+      +'<div class="df"><select>'+sel(VYSL_OPTIONS,k&&k.vysledek)+'</select></div>'
+      +'<div class="df"><input placeholder="Č. protokolu" value="'+escHtml(k&&k.protokol||'')+'"/></div>'
+      +'<div class="df" style="display:flex;align-items:flex-end;"><button class="remove-btn" onclick="this.closest(\'.kontrola-item\').remove()">✕</button></div>'
+      +'</div>';
+    document.getElementById('kontroly-list').appendChild(item);
+  }
+
+  function addTDIFromData(t) {
+    var item = document.createElement('div');
+    item.className = 'tdi-item';
+    item.innerHTML = '<div class="tdi-grid">'
+      +'<div class="tdi-field"><label>Typ záznamu</label><select>'+sel(TYP_OPTIONS,t&&t.typ)+'</select></div>'
+      +'<div class="tdi-field"><label>Jméno dozorující osoby</label><input placeholder="Jméno, titul…" value="'+escHtml(t&&t.jmeno||'')+'"/></div>'
+      +'<div class="tdi-field"><label>Firma / úřad</label><input placeholder="Název organizace…" value="'+escHtml(t&&t.firma||'')+'"/></div>'
+      +'<div class="tdi-field full"><label>Záznam / připomínky / požadavky *</label><textarea rows="3" placeholder="Popište obsah záznamu…">'+escHtml(t&&t.zaznam||'')+'</textarea></div>'
+      +'<div class="tdi-field"><label>Termín splnění</label><input type="date" value="'+escHtml(t&&t.termin||'')+'"/></div>'
+      +'<div class="tdi-field"><label>Stav</label><select>'+sel(STAV_OPTIONS,t&&t.stav)+'</select></div>'
+      +'<div class="tdi-field" style="display:flex;align-items:flex-end;"><button class="remove-btn" style="color:var(--red);" onclick="this.closest(\'.tdi-item\').remove()">Odebrat</button></div>'
+      +'</div>';
+    document.getElementById('tdi-list').appendChild(item);
+  }
+
+  // ══ Original UI logic ════════════════════════════════════
 
   function selectWeather(btn) {
     document.querySelectorAll('.weather-chip').forEach(c => c.classList.remove('selected'));
@@ -763,52 +1003,19 @@
 
   function removeRow(btn) { btn.closest('.worker-row').remove(); updateTotal(); }
 
-  function addWorker() {
-    const wl = document.getElementById('workers-list');
-    wl.innerHTML += `
-      <div class="worker-row">
-        <select class="count-select">${[1,2,3,4,5,6,7,8,9,10,12,15,20].map(n=>`<option>${n}</option>`).join('')}</select>
-        <select class="prof-select">
-          <option>Zedník</option><option>Betonář</option><option>Tesař</option>
-          <option>Železář</option><option>Instalatér</option><option>Elektrikář</option>
-          <option>Malíř / natěrač</option><option>Obkladač</option><option>Podlahář</option>
-          <option>Klempíř</option><option>Lešenář</option><option>Řidič / strojník</option>
-          <option>Stavbyvedoucí</option><option>Mistr</option><option>Geodet</option><option>Revizní technik</option><option>Jiné</option>
-        </select>
-        <input class="firm-input" placeholder="Firma / subdodavatel…" />
-        <input class="qual-input" placeholder="Osvědčení / licence…" />
-        <button class="remove-btn" onclick="removeRow(this)">✕</button>
-      </div>`;
-    updateTotal();
-  }
+  function addWorker() { addWorkerRow(null); }
 
   function updateTotal() {
-    const rows = document.querySelectorAll('.worker-row');
-    let total = 0;
+    var rows = document.querySelectorAll('.worker-row');
+    var total = 0;
     rows.forEach(r => { total += parseInt(r.querySelector('.count-select').value) || 0; });
-    document.getElementById('workers-total').innerHTML = `Celkem na stavbě: <strong>${total} pracovníků</strong>`;
+    document.getElementById('workers-total').innerHTML = 'Celkem na stavbě: <strong>' + total + ' pracovníků</strong>';
   }
 
-  let praceCount = 2;
-  const katList = ['Zemní práce','Betonáž','Zdění','Tesařské práce','Železářské práce','Instalace (ZTI)','Elektro','Omítky','Obklady / dlažby','Podlahy','Střecha','Lešení','Fasáda','Bourání','Geodetické práce','Jiné'];
+  var praceCount = 0;
+  var katList = ['Zemní práce','Betonáž','Zdění','Tesařské práce','Železářské práce','Instalace (ZTI)','Elektro','Omítky','Obklady / dlažby','Podlahy','Střecha','Lešení','Fasáda','Bourání','Geodetické práce','Jiné'];
 
-  function addPrace() {
-    praceCount++;
-    document.getElementById('prace-list').innerHTML += `
-      <div class="prace-item">
-        <div class="prace-item-header">
-          <span class="prace-num">Práce č. ${praceCount}</span>
-          <button class="remove-btn" onclick="this.closest('.prace-item').remove()" style="font-size:0.78rem;color:var(--muted);">Odebrat</button>
-        </div>
-        <div class="kategorie-label">Kategorie prací</div>
-        <div class="kategorie-chips">${katList.map(k=>`<button class="kat-chip" onclick="toggleKat(this)">${k}</button>`).join('')}</div>
-        <div class="prace-grid">
-          <div class="prace-field full"><label>Přesný popis činnosti *</label><textarea rows="2" placeholder="Popište co přesně bylo prováděno…"></textarea></div>
-          <div class="prace-field"><label>Místo na stavbě</label><select><option>Přízemí</option><option>1. nadzemní podlaží</option><option>2. nadzemní podlaží</option><option>3. nadzemní podlaží</option><option>Suterén</option><option>Střecha</option><option>Fasáda</option><option>Vnější plochy</option><option>Základy</option><option>Jiné místo…</option></select></div>
-          <div class="prace-field"><label>Rozsah prací</label><div class="rozsah-row"><input type="number" placeholder="Množství" /><select><option>m²</option><option>m³</option><option>bm</option><option>ks</option><option>hod</option><option>t</option><option>—</option></select></div></div>
-        </div>
-      </div>`;
-  }
+  function addPrace() { addPraceFromData(null); }
 
   const templates = {
     beton:  { kat:'Betonáž', popis:'Betonáž stropní desky — beton C25/30, tl. 200 mm.' },
@@ -821,85 +1028,14 @@
   };
 
   function addFromTemplate(key) {
-    praceCount++;
-    const t = templates[key];
-    document.getElementById('prace-list').innerHTML += `
-      <div class="prace-item">
-        <div class="prace-item-header">
-          <span class="prace-num">Práce č. ${praceCount} <span style="color:var(--green);font-size:0.65rem; font-weight:400;">(ze šablony)</span></span>
-          <button class="remove-btn" onclick="this.closest('.prace-item').remove()" style="font-size:0.78rem;color:var(--muted);">Odebrat</button>
-        </div>
-        <div class="kategorie-label">Kategorie prací</div>
-        <div class="kategorie-chips">${katList.map(k=>`<button class="kat-chip${k===t.kat?' sel':''}" onclick="toggleKat(this)">${k}</button>`).join('')}</div>
-        <div class="prace-grid">
-          <div class="prace-field full"><label>Přesný popis činnosti *</label><textarea rows="2">${t.popis}</textarea></div>
-          <div class="prace-field"><label>Místo na stavbě</label><select><option>Přízemí</option><option>1. nadzemní podlaží</option><option>2. nadzemní podlaží</option><option>3. nadzemní podlaží</option><option>Suterén</option><option>Střecha</option><option>Fasáda</option><option>Vnější plochy</option><option>Základy</option><option>Jiné místo…</option></select></div>
-          <div class="prace-field"><label>Rozsah prací</label><div class="rozsah-row"><input type="number" placeholder="Množství" /><select><option>m²</option><option>m³</option><option>bm</option><option>ks</option><option>hod</option><option>t</option><option>—</option></select></div></div>
-        </div>
-      </div>`;
+    var t = templates[key];
+    if (!t) return;
+    addPraceFromData({ kategorie:[t.kat], popis:t.popis, misto:'Přízemí', rozsahQty:null, rozsahUnit:'m²' });
   }
 
-  function addDodavka() {
-    document.getElementById('dodavky-list').innerHTML += `
-      <div class="dodavka-item">
-        <div class="dodavka-grid">
-          <div class="df"><input placeholder="Název materiálu / výrobku…" /></div>
-          <div class="df"><input placeholder="Množství + j." /></div>
-          <div class="df"><input placeholder="Dodavatel" /></div>
-          <div class="df"><input placeholder="Č. DL" /></div>
-          <div class="df"><input placeholder="Atesty / CE" /></div>
-          <div class="df" style="display:flex;align-items:flex-end;"><button class="remove-btn" onclick="this.closest('.dodavka-item').remove()">✕</button></div>
-        </div>
-      </div>`;
-  }
-
-  function addKontrola() {
-    document.getElementById('kontroly-list').innerHTML += `
-      <div class="kontrola-item">
-        <div class="kontrola-grid">
-          <div class="df"><select><option>Zkouška konzistence betonu</option><option>Odběr vzorků betonu</option><option>Kontrola výztuže</option><option>Geodetické zaměření</option><option>Tlaková zkouška vodovodu</option><option>Zkouška těsnosti kanalizace</option><option>Revize elektroinstalace</option><option>Kontrola svárů</option><option>Kontrolní prohlídka stavby (SÚ)</option><option>Jiná kontrola / zkouška</option></select></div>
-          <div class="df"><input placeholder="Jméno / firma" /></div>
-          <div class="df"><select><option>Vyhovující</option><option>Nevyhovující – viz poznámka</option><option>Podmíněně vyhovující</option><option>Probíhá / čeká na výsledek</option></select></div>
-          <div class="df"><input placeholder="Č. protokolu" /></div>
-          <div class="df" style="display:flex;align-items:flex-end;"><button class="remove-btn" onclick="this.closest('.kontrola-item').remove()">✕</button></div>
-        </div>
-      </div>`;
-  }
-
-  function addTDI() {
-    document.getElementById('tdi-list').innerHTML += `
-      <div class="tdi-item">
-        <div class="tdi-grid">
-          <div class="tdi-field">
-            <label>Typ záznamu</label>
-            <select><option>TDI – Technický dozor investora</option><option>AD – Autorský dozor projektanta</option><option>Kontrola stavebního úřadu</option><option>Jiný dozor / záznam</option></select>
-          </div>
-          <div class="tdi-field">
-            <label>Jméno dozorující osoby</label>
-            <input placeholder="Jméno, titul…" />
-          </div>
-          <div class="tdi-field">
-            <label>Firma / úřad</label>
-            <input placeholder="Název organizace…" />
-          </div>
-          <div class="tdi-field full">
-            <label>Záznam / připomínky / požadavky *</label>
-            <textarea rows="3" placeholder="Popište obsah záznamu, připomínky, pokyny a požadavky dozorující osoby…"></textarea>
-          </div>
-          <div class="tdi-field">
-            <label>Termín splnění</label>
-            <input type="date" />
-          </div>
-          <div class="tdi-field">
-            <label>Stav</label>
-            <select><option>Otevřeno – splnit do termínu</option><option>Splněno</option><option>V řešení</option></select>
-          </div>
-          <div class="tdi-field" style="display:flex;align-items:flex-end;">
-            <button class="remove-btn" style="color:var(--red);" onclick="this.closest('.tdi-item').remove()">Odebrat</button>
-          </div>
-        </div>
-      </div>`;
-  }
+  function addDodavka()  { addDodavkaFromData(null); }
+  function addKontrola() { addKontrolaFromData(null); }
+  function addTDI()      { addTDIFromData(null); }
 
   // ── Mechanizace ──────────────────────────────────────────────
   const companyMachines = [
@@ -1063,15 +1199,39 @@
     handlePhotos(e.dataTransfer.files);
   }
 
-  function newDay() { showToast('Nový zápis pro dnešní den byl připraven.'); }
-  function saveDay() { showToast('Zápis byl uložen'); }
-
   function showToast(msg) {
-    const t = document.getElementById('toast');
+    var t = document.getElementById('toast');
     t.textContent = msg;
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
   }
+
+  // ── Boot ─────────────────────────────────────────────────
+  initUI();
+  updateMonthLabel();
+  renderDayList();
+
+  // Auto-load most recent entry on page open
+  (function autoLoad() {
+    var entries = getEntries();
+    var today   = new Date();
+    var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+    if (entries.length > 0) {
+      var latest = entries.slice().sort((a,b)=>b.date.localeCompare(a.date))[0];
+      currentDate  = latest.date;
+      var d        = new Date(latest.date+'T00:00:00');
+      currentMonth = d.getMonth();
+      currentYear  = d.getFullYear();
+      updateMonthLabel();
+      renderDayList();
+      loadEntry(latest.date);
+    } else {
+      currentDate = todayStr;
+      var d2 = new Date(todayStr+'T00:00:00');
+      document.getElementById('day-date-big').innerHTML = DAYS_CS[d2.getDay()] + ' ' + d2.getDate() + '. ' + MONTHS_CS[d2.getMonth()].toLowerCase() + ' ' + d2.getFullYear() + ' <span class="day-num">Nový zápis</span>';
+      addWorker();
+    }
+  })();
 </script>
 </body>
 </html>
